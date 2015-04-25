@@ -247,16 +247,16 @@
     <TypeScriptCompile Include="Scripts\Enums.ts">
       <DependentUpon>GameEntitesInterfaces.tt</DependentUpon>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Game\BoundingBox.ts" />
-    <TypeScriptCompile Include="Scripts\Game\Game.ts" />
-    <TypeScriptCompile Include="Scripts\Game\KeyboardGroup.ts" />
-    <TypeScriptCompile Include="Scripts\Game\KeyboardStates.ts" />
-    <TypeScriptCompile Include="Scripts\Game\Map.ts" />
-    <TypeScriptCompile Include="Scripts\Game\ClientPlayer.ts" />
-    <TypeScriptCompile Include="Scripts\Game\NetworkHandler.ts" />
-    <TypeScriptCompile Include="Scripts\Game\Rendering.ts" />
-    <TypeScriptCompile Include="Scripts\Game\Team.ts" />
-    <TypeScriptCompile Include="Scripts\Game\ToastrOptions.ts" />
+    <TypeScriptCompile Include="Scripts\game\BoundingBox.ts" />
+    <TypeScriptCompile Include="Scripts\game\Game.ts" />
+    <TypeScriptCompile Include="Scripts\game\KeyboardGroup.ts" />
+    <TypeScriptCompile Include="Scripts\game\KeyboardStates.ts" />
+    <TypeScriptCompile Include="Scripts\game\Map.ts" />
+    <TypeScriptCompile Include="Scripts\game\ClientPlayer.ts" />
+    <TypeScriptCompile Include="Scripts\game\NetworkHandler.ts" />
+    <TypeScriptCompile Include="Scripts\game\Rendering.ts" />
+    <TypeScriptCompile Include="Scripts\game\Team.ts" />
+    <TypeScriptCompile Include="Scripts\game\ToastrOptions.ts" />
     <TypeScriptCompile Include="Scripts\GameEntitesInterfaces.d.ts">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

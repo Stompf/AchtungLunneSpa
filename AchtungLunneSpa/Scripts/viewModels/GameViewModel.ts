@@ -1,5 +1,5 @@
 ﻿import AppMain = require('../app/appMain');
-import Game = require('../Game/game');
+import Game = require('../game/game');
 import ko = require('knockout');
 import utils = require('../common/Utils');
 import moment = require('moment');
