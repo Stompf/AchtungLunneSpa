@@ -11,4 +11,4 @@ define(["require", "exports"], function (require, exports) {
     })();
     return BoundingBox;
 });
-//# sourceMappingURL=boundingBox.js.map
+//# sourceMappingURL=BoundingBox.js.map

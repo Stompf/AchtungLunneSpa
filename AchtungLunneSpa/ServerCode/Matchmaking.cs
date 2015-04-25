@@ -60,15 +60,15 @@ namespace SPATest.ServerCode
 		public void ReadyRecived(string connectionID)
 		{
 			lock (playersLockObject)
-			{
-				var player = CurrentPlayers[connectionID];
-				if (player != null)
+			{				
+				if (CurrentPlayers.ContainsKey(connectionID))
 				{
+					var player = CurrentPlayers[connectionID];
 					lock (gamesLockObject)
-					{
-						var game = CurrentGames[player.GameGroupID];
-						if (game != null)
+					{						
+						if (CurrentGames.ContainsKey(player.GameGroupID))
 						{
+							var game = CurrentGames[player.GameGroupID];
 							game.ReadyRecived(player);
 						}
 					}
@@ -77,13 +77,13 @@ namespace SPATest.ServerCode
 		}
 
 		public void GameUpdateRecived(string connectionID, SendUpdateGameEntity sendUpdateGameEntity)
-		{
-			var player = CurrentPlayers[connectionID];
-			if (player != null)
+		{			
+			if (CurrentPlayers.ContainsKey(connectionID))
 			{
-				var game = CurrentGames[player.GameGroupID];
-				if (game != null)
+				var player = CurrentPlayers[connectionID];				
+				if (CurrentGames.ContainsKey(player.GameGroupID))
 				{
+					var game = CurrentGames[player.GameGroupID];
 					game.UpdateRecived(connectionID, sendUpdateGameEntity);
 				}
 			}
@@ -104,13 +104,13 @@ namespace SPATest.ServerCode
 				if (CurrentPlayers.ContainsKey(myHub.Context.ConnectionId))
 				{
 					lock (gamesLockObject)
-					{
-						var player = CurrentPlayers[myHub.Context.ConnectionId];
-						if (player != null)
+					{						
+						if (CurrentPlayers.ContainsKey(myHub.Context.ConnectionId))
 						{
-							var game = CurrentGames[player.GameGroupID];
-							if (game != null)
+							var player = CurrentPlayers[myHub.Context.ConnectionId];						
+							if (CurrentGames.ContainsKey(player.GameGroupID))
 							{
+								var game = CurrentGames[player.GameGroupID];
 								game.EndGame(myHub);
 								if (game.player1.ConnectionId == myHub.Context.ConnectionId)
 								{
@@ -121,7 +121,7 @@ namespace SPATest.ServerCode
 									CurrentPlayers.Remove(game.player1.ConnectionId);
 								}
 							}
-							CurrentGames.Remove(game.GroupReference);
+							CurrentGames.Remove(player.GameGroupID);
 						}
 					}
 					CurrentPlayers.Remove(myHub.Context.ConnectionId);

@@ -1,7 +1,7 @@
 ﻿import KeyboardStates = require("./KeyboardStates");
 import KeyboardGroup = require("./KeyboardGroup");
-import Map = require("./map");
-import Team = require("./team");
+import Map = require("./Map");
+import Team = require("./Team");
 import collection = require('collections');
 
 class ClientPlayer implements SPATest.ServerCode.Player {
@@ -84,17 +84,6 @@ class ClientPlayer implements SPATest.ServerCode.Player {
             }
         }
         this.position = newPosition;
-    }
-
-    checkWinningCondition(map: Map) {
-        switch (this.team) {
-            case SPATest.ServerCode.Team.BLUE:
-                return map.teamRedZone.isInBounds(this.position);
-            case SPATest.ServerCode.Team.RED:
-                return map.teamBlueZone.isInBounds(this.position);
-            default:
-                alert("checkWinningCondition - Team not found!");
-        }
     }
 
     victoryMessage() {

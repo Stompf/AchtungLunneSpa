@@ -9,4 +9,4 @@ define(["require", "exports"], function (require, exports) {
     })();
     return AppComponent;
 });
-//# sourceMappingURL=appComponent.js.map
+//# sourceMappingURL=AppComponent.js.map

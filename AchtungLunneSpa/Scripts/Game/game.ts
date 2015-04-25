@@ -1,9 +1,9 @@
 ﻿import ko = require("knockout");
 import ClientPlayer = require("./ClientPlayer");
-import Map = require("./map");
+import Map = require("./Map");
 import KeyboardGroup = require("./KeyboardGroup");
 import Rendering = require("./Rendering");
-import Team = require("./team");
+import Team = require("./Team");
 import toastr = require("toastr");
 import $ = require('jquery');
 import utils = require('../common/Utils');
@@ -273,14 +273,14 @@ class Game {
         //Player 1
 		var serverPlayer1 = <SPATest.ServerCode.Player>{
 			team: SPATest.ServerCode.Team.BLUE,
-			position: this.currentMap().teamBlueStartPosition
+			position: this.currentMap().getRandomStartPosition()
 		};
         var player1 = new ClientPlayer(serverPlayer1, KeyboardGroup.WSAD, true);
 
         //Player 2
 		var serverPlayer2 = <SPATest.ServerCode.Player>{
 			team: SPATest.ServerCode.Team.RED,
-			position: this.currentMap().teamRedStartPosition
+			position: this.currentMap().getRandomStartPosition()
 		};
         var player2 = new ClientPlayer(serverPlayer2, KeyboardGroup.Arrows, true);
 		this.initMap();

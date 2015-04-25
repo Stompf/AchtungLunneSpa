@@ -247,16 +247,16 @@
     <TypeScriptCompile Include="Scripts\Enums.ts">
       <DependentUpon>GameEntitesInterfaces.tt</DependentUpon>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Game\boundingBox.ts" />
-    <TypeScriptCompile Include="Scripts\Game\game.ts" />
-    <TypeScriptCompile Include="Scripts\Game\keyboardGroup.ts" />
-    <TypeScriptCompile Include="Scripts\Game\keyboardStates.ts" />
-    <TypeScriptCompile Include="Scripts\Game\map.ts" />
+    <TypeScriptCompile Include="Scripts\Game\BoundingBox.ts" />
+    <TypeScriptCompile Include="Scripts\Game\Game.ts" />
+    <TypeScriptCompile Include="Scripts\Game\KeyboardGroup.ts" />
+    <TypeScriptCompile Include="Scripts\Game\KeyboardStates.ts" />
+    <TypeScriptCompile Include="Scripts\Game\Map.ts" />
     <TypeScriptCompile Include="Scripts\Game\ClientPlayer.ts" />
     <TypeScriptCompile Include="Scripts\Game\NetworkHandler.ts" />
     <TypeScriptCompile Include="Scripts\Game\Rendering.ts" />
-    <TypeScriptCompile Include="Scripts\Game\team.ts" />
-    <TypeScriptCompile Include="Scripts\Game\toastrOptions.ts" />
+    <TypeScriptCompile Include="Scripts\Game\Team.ts" />
+    <TypeScriptCompile Include="Scripts\Game\ToastrOptions.ts" />
     <TypeScriptCompile Include="Scripts\GameEntitesInterfaces.d.ts">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -293,8 +293,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Scripts\app\appComponent.ts" />
-    <TypeScriptCompile Include="Scripts\app\appMain.ts" />
+    <TypeScriptCompile Include="Scripts\app\AppComponent.ts" />
+    <TypeScriptCompile Include="Scripts\app\AppMain.ts" />
     <TypeScriptCompile Include="Scripts\require.config.ts" />
     <TypeScriptCompile Include="Scripts\services\services.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />

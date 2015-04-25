@@ -1,6 +1,6 @@
 ﻿import ko = require('knockout');
 import $ = require('jquery');
-import AppComponent = require('./appComponent');
+import AppComponent = require('./AppComponent');
 
 class AppMain {
     appComponents: KnockoutObservableArray<AppComponent>;

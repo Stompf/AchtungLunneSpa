@@ -9,9 +9,7 @@ namespace SPATest.ServerCode
 	{
 		public string GroupReference { get; set; }
 		public dynamic GroupManager { get; }
-
 		public Map CurrentMap { get; }
-
 		public Player player1 { get; }
 		public Player player2 { get; }
 
@@ -26,12 +24,12 @@ namespace SPATest.ServerCode
 			this.player1 = player1;
 			this.player1.GameGroupID = GroupReference;
 			this.player1.Team = Team.RED;
-			this.player1.Position = CurrentMap.TeamBlueStartPosition;
+			this.player1.Position = CurrentMap.GetRandomPosition();
 
 			this.player2 = player2;
 			this.player2.Team = Team.BLUE;
 			this.player2.GameGroupID = GroupReference;
-			this.player2.Position = CurrentMap.TeamRedStartPosition;
+			this.player2.Position = CurrentMap.GetRandomPosition();
 
 			myHub.Groups.Add(player1.ConnectionId, GroupReference);
 			myHub.Groups.Add(player2.ConnectionId, GroupReference);

@@ -11,16 +11,20 @@ namespace SPATest.ServerCode
 	{
 		public Size MapSize { get; }
 
-		public Vector2D TeamBlueStartPosition { get; }
-		public Vector2D TeamRedStartPosition { get; }
-
 		private int StartPositionPadding = 30;
+		private Random _random;
 
 		public Map()
 		{
 			MapSize = new Size() { Height = 500, Width = 1000 };
-			TeamBlueStartPosition = new Vector2D { X = MapSize.Width - StartPositionPadding, Y = MapSize.Height / 2 };
-			TeamRedStartPosition = new Vector2D { X = StartPositionPadding - Player.StartSize.Width, Y = MapSize.Height / 2 };
+			_random = new Random(DateTime.Now.Millisecond);
 		}
+
+		public Vector2D GetRandomPosition()
+		{
+			var randX = _random.Next(5, MapSize.Width - 5);
+			var randY = _random.Next(5, MapSize.Height - 5);
+			return new Vector2D { X = randX, Y = randY };
+        }
 	}
 }

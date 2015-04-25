@@ -18,4 +18,4 @@ define(["require", "exports", "toastr"], function (require, exports, toastr) {
     })(ToastrOptions || (ToastrOptions = {}));
     return ToastrOptions;
 });
-//# sourceMappingURL=toastrOptions.js.map
+//# sourceMappingURL=ToastrOptions.js.map

@@ -1,4 +1,4 @@
-define(["require", "exports", 'knockout', 'jquery', './appComponent'], function (require, exports, ko, $, AppComponent) {
+define(["require", "exports", 'knockout', 'jquery', './AppComponent'], function (require, exports, ko, $, AppComponent) {
     var AppMain = (function () {
         function AppMain() {
             var _this = this;
