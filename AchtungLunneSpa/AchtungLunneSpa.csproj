@@ -268,7 +268,7 @@
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\signalr\signalr.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\toastr\toastr.d.ts" />
-    <TypeScriptCompile Include="Scripts\viewModels\GameVIewModel.ts" />
+    <TypeScriptCompile Include="Scripts\viewModels\GameViewModel.ts" />
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
