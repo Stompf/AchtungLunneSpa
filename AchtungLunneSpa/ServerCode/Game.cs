@@ -80,6 +80,10 @@ namespace SPATest.ServerCode
         {
             lock (updateLock)
             {
+				UpdateMap(player1);
+				UpdateMap(player2);
+				CurrentMap.Tick++;
+
                 var updateEntity = new UpdateGameEntity { Map = CurrentMap, Players = new Player[] { player1, player2 } };
                 GroupManager.updateGame(updateEntity);
             }
@@ -111,6 +115,16 @@ namespace SPATest.ServerCode
 			else
 			{
 				return null;
+			}
+		}
+
+		public void UpdateMap(Player player)
+		{
+			var key = CurrentMap.ToMapPartKey(player.Position.X, player.Position.Y);
+            if (CurrentMap.MapParts.ContainsKey(key))
+			{
+				CurrentMap.MapParts[key].Owner = player.ConnectionId;
+				CurrentMap.MapParts[key].Color = player.Color;
 			}
 		}
 	}

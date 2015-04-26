@@ -179,6 +179,7 @@
     <Compile Include="ServerCode\Game.cs" />
     <Compile Include="ServerCode\GameEntities.cs" />
     <Compile Include="ServerCode\Map.cs" />
+    <Compile Include="ServerCode\MapPart.cs" />
     <Compile Include="ServerCode\Matchmaking.cs" />
     <Compile Include="ServerCode\Player.cs" />
     <Compile Include="SignalRContractResolver.cs" />
@@ -251,7 +252,7 @@
     <TypeScriptCompile Include="Scripts\game\Game.ts" />
     <TypeScriptCompile Include="Scripts\game\KeyboardGroup.ts" />
     <TypeScriptCompile Include="Scripts\game\KeyboardStates.ts" />
-    <TypeScriptCompile Include="Scripts\game\Map.ts" />
+    <TypeScriptCompile Include="Scripts\game\ClientMap.ts" />
     <TypeScriptCompile Include="Scripts\game\ClientPlayer.ts" />
     <TypeScriptCompile Include="Scripts\game\NetworkHandler.ts" />
     <TypeScriptCompile Include="Scripts\game\Rendering.ts" />
@@ -262,7 +263,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GameEntitesInterfaces.tt</DependentUpon>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\typings\GameEntites.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\GameInterfaces.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />

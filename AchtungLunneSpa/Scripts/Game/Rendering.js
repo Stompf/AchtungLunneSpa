@@ -11,7 +11,9 @@ define(["require", "exports"], function (require, exports) {
         }
         Rendering.render = render;
         function renderMap(ctx, map, deltaTick) {
-            map.render(ctx, deltaTick);
+            if (map != null) {
+                map.render(ctx, deltaTick);
+            }
         }
         function renderPlayers(ctx, players, deltaTick) {
             players.forEach(function (player) {

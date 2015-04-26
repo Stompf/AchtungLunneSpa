@@ -16,16 +16,20 @@ declare module SPATest.ServerCode {
 	}
 	interface Map {
 		mapSize: SPATest.ServerCode.Size;
-		teamBlueStartPosition: SPATest.ServerCode.Vector2D;
-		teamRedStartPosition: SPATest.ServerCode.Vector2D;
+		mapParts: System.Collections.Generic.KeyValuePair<string, SPATest.ServerCode.MapPart>[];
+		tick: number;
+		playerSize: number;
+		startPositionPadding: number;
 	}
 	interface Size {
 		height: number;
 		width: number;
 	}
-	interface Vector2D {
+	interface MapPart {
 		x: number;
 		y: number;
+		owner: string;
+		color: string;
 	}
 	interface Player {
 		connectionId: string;
@@ -35,6 +39,10 @@ declare module SPATest.ServerCode {
 		startSize: SPATest.ServerCode.Size;
 		latestFrameUpdate: number;
 	}
+	interface Vector2D {
+		x: number;
+		y: number;
+	}
 	interface UpdateGameEntity {
 		map: SPATest.ServerCode.Map;
 		players: SPATest.ServerCode.Player[];
@@ -42,6 +50,12 @@ declare module SPATest.ServerCode {
 	interface SendUpdateGameEntity {
 		player: SPATest.ServerCode.Player;
 		frame: number;
+	}
+}
+declare module System.Collections.Generic {
+	interface KeyValuePair<TKey, TValue> {
+		key: TKey;
+		value: TValue;
 	}
 }
 

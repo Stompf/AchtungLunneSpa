@@ -13,11 +13,11 @@
 	export function serverToGameEntity(team: SPATest.ServerCode.Team) {
 		switch (team) {
             case SPATest.ServerCode.Team.RED:
-                return GameEntites.Team.RED;
+                return SPATest.ServerCode.Team.RED;
             case SPATest.ServerCode.Team.BLUE:
-                return GameEntites.Team.BLUE;
+                return SPATest.ServerCode.Team.BLUE;
             default:
-                return GameEntites.Team.RED;
+                return SPATest.ServerCode.Team.RED;
         }
 	}
 }

@@ -1,21 +1,23 @@
 ﻿import ClientPlayer = require("./ClientPlayer");
-import Map = require("./map");
+import ClientMap = require("./ClientMap");
 
 module Rendering {
 
-    export function render(ctx: CanvasRenderingContext2D, players: Array<ClientPlayer>, deltaTick: number, map: Map) {
+    export function render(ctx: CanvasRenderingContext2D, players: Array<ClientPlayer>, deltaTick: number, map: ClientMap) {
         ctx.save();
         ctx.fillStyle = "#FFFFFF";
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
+		
         renderMap(ctx, map, deltaTick);
         renderPlayers(ctx, players, deltaTick);
 
         ctx.restore();
     }
 
-    function renderMap(ctx: CanvasRenderingContext2D, map: Map, deltaTick: number) {
-        map.render(ctx, deltaTick);
+    function renderMap(ctx: CanvasRenderingContext2D, map: ClientMap, deltaTick: number) {
+		if (map != null) {
+			map.render(ctx, deltaTick);
+		}
     }
 
     function renderPlayers(ctx: CanvasRenderingContext2D, players: Array<ClientPlayer>, deltaTick: number) {

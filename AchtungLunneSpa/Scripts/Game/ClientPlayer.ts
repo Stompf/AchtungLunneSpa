@@ -1,17 +1,17 @@
 ﻿import KeyboardStates = require("./KeyboardStates");
 import KeyboardGroup = require("./KeyboardGroup");
-import Map = require("./Map");
+import ClientMap = require("./ClientMap");
 import Team = require("./Team");
 import collection = require('collections');
 
 class ClientPlayer implements SPATest.ServerCode.Player {
 
-    startSize: GameEntites.Size;
+    startSize: SPATest.ServerCode.Size;
 
-    position: GameEntites.Vector2D;
+    position: SPATest.ServerCode.Vector2D;
     color: string;
     team: SPATest.ServerCode.Team;
-    size: GameEntites.Size;
+    size: SPATest.ServerCode.Size;
     keyboardStates: KeyboardStates;
 	connectionId: string;
 	movement: number;
@@ -26,7 +26,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
         this.color = this.setColor(this.team);       
         this.isLocalPlayer = isLocalPlayer;
 		this.connectionId = serverPlayer.connectionId;
-		serverPlayer.startSize ? this.startSize = serverPlayer.startSize : this.startSize = <GameEntites.Size> { height: 10, width: 10 };
+		serverPlayer.startSize ? this.startSize = serverPlayer.startSize : this.startSize = <SPATest.ServerCode.Size> { height: 10, width: 10 };
         this.size = this.startSize;
         this.latestFrameUpdate = 0;
 		this.movement = 0.25;
@@ -41,7 +41,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
         ctx.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);
     }
 
-    update(ctx: CanvasRenderingContext2D, map: Map, tickLenght: number) {
+    update(ctx: CanvasRenderingContext2D, map: ClientMap, tickLenght: number) {
         var newPosition = this.position;
 
         if (this.isLocalPlayer) {
@@ -54,7 +54,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
 			}
 
 			var speed = (this.speed / tickLenght);
-			var newPos = <GameEntites.Vector2D> {
+			var newPos = <SPATest.ServerCode.Vector2D> {
 				x: Math.round(Math.cos(this.movement) * speed + newPosition.x),
 				y: Math.round(Math.sin(this.movement) * speed + newPosition.y)
 			};
@@ -64,7 +64,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
 
 			/*
             if (this.keyboardStates.isUpKeyDown) {
-                var newPos = <GameEntites.Vector2D> {
+                var newPos = <SPATest.ServerCode.Vector2D> {
                     x: newPosition.x,
                     y: newPosition.y - (this.speed / tickLenght)
                 };
@@ -74,7 +74,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
             }
 
             if (this.keyboardStates.isDownKeyDown) {
-                var newPos = <GameEntites.Vector2D> {
+                var newPos = <SPATest.ServerCode.Vector2D> {
                     x: newPosition.x,
                     y: newPosition.y + (this.speed / tickLenght)
                 };
@@ -84,7 +84,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
             }
 
             if (this.keyboardStates.isLeftKeyDown) {
-                var newPos = <GameEntites.Vector2D> {
+                var newPos = <SPATest.ServerCode.Vector2D> {
                     x: newPosition.x - (this.speed / tickLenght),
                     y: newPosition.y
                 };
@@ -94,7 +94,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
             }
 
             if (this.keyboardStates.isRightKeyDown) {
-                var newPos = <GameEntites.Vector2D> {
+                var newPos = <SPATest.ServerCode.Vector2D> {
                     x: newPosition.x + (this.speed / tickLenght),
                     y: newPosition.y
                 };

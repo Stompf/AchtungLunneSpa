@@ -1,14 +1,14 @@
 ﻿interface MyHubClient {
-    newGameStart(obj: GameEntites.NewGameStartEntity): void
+    newGameStart(obj: SPATest.ServerCode.NewGameStartEntity): void
 	endGame(message: string): void;
-	initGame(obj: GameEntites.InitGameEntity): void;
-	updateGame(obj: GameEntites.UpdateGameEntity): void;
+	initGame(obj: SPATest.ServerCode.InitGameEntity): void;
+	updateGame(obj: SPATest.ServerCode.UpdateGameEntity): void;
 }
 
 interface MyHubServer {
 	searchForGame(): void;
 	sendReady(): void;
-	sendUpdate(updateObj: GameEntites.SendUpdateGameEntity): JQueryPromise<any>;
+	sendUpdate(updateObj: SPATest.ServerCode.SendUpdateGameEntity): JQueryPromise<any>;
 }
 
 interface MyHub {

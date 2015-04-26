@@ -1,6 +1,6 @@
 ﻿import ko = require("knockout");
 import ClientPlayer = require("./ClientPlayer");
-import Map = require("./Map");
+import ClientMap = require("./ClientMap");
 import KeyboardGroup = require("./KeyboardGroup");
 import Rendering = require("./Rendering");
 import Team = require("./Team");
@@ -16,7 +16,7 @@ class Game {
 
 	currentLocalPlayers: KnockoutObservableArray<ClientPlayer>;
     currentPlayers: KnockoutObservableArray<ClientPlayer>;
-    currentMap: KnockoutObservable<Map>;
+    currentMap: KnockoutObservable<ClientMap>;
     gameOn: KnockoutObservable<boolean>;
     networkHandler: NetworkHandler;
 
@@ -33,7 +33,7 @@ class Game {
     constructor(ctx: CanvasRenderingContext2D, textArea: KnockoutObservable<string>) {
 		this.currentLocalPlayers = ko.observableArray<ClientPlayer>();
         this.currentPlayers = ko.observableArray<ClientPlayer>();
-        this.currentMap = ko.observable<Map>();
+        this.currentMap = ko.observable<ClientMap>();
         this.gameOn = ko.observable<boolean>();
         this.lastRender = this.lastTick;
         this.textArea = textArea;
@@ -123,7 +123,7 @@ class Game {
 		});
 	}
 
-	private handleInitGame(initGameEntity: GameEntites.InitGameEntity) {
+	private handleInitGame(initGameEntity: SPATest.ServerCode.InitGameEntity) {
 		this.appendLine('InitGame recived');
 		this.gameOn(false);
         this.currentPlayers.removeAll();
@@ -146,7 +146,7 @@ class Game {
 		this.appendLine('SendReady sent');
 	}
 
-	private handleNewGameStart(newGameStartEntity: GameEntites.NewGameStartEntity) {
+	private handleNewGameStart(newGameStartEntity: SPATest.ServerCode.NewGameStartEntity) {
 		var gameStartInSeconds = moment.duration(moment(utils.getFormatedDateWithTime(newGameStartEntity.startTime)).diff(moment())).asSeconds();
 		this.appendLine('Game start in ' + gameStartInSeconds + ' seconds');
 
@@ -156,10 +156,14 @@ class Game {
 		}, gameStartInSeconds * 1000);
 	}
 
-	private handleServerUpdate(updateGameEntity: GameEntites.UpdateGameEntity) {
+	private handleServerUpdate(updateGameEntity: SPATest.ServerCode.UpdateGameEntity) {
 		if (updateGameEntity == null) {
 			this.appendLine('<b><span style="color: red">ERROR - UpdateGameEntity was null!</span></b>');
 			return;
+		}
+
+		if (updateGameEntity.map.tick > this.currentMap().map.tick) {
+			this.currentMap().map = updateGameEntity.map;
 		}
 
 		updateGameEntity.players.forEach(player => {
@@ -192,7 +196,7 @@ class Game {
         this.lastRender = tFrame;
 
         this.currentLocalPlayers().forEach(localPlayer => {
-            var updateObj = < GameEntites.SendUpdateGameEntity > {
+            var updateObj = < SPATest.ServerCode.SendUpdateGameEntity > {
                 player: localPlayer,
                 frame: tFrame
             };
@@ -217,30 +221,10 @@ class Game {
             return;
         }
 
-        var players = this.currentPlayers();
         var map = this.currentMap();
-
-        for (var i = 0; i < players.length; i++) {
-            players[i].update(this.ctx, map, this.tickLength);
-           
-            
-            /*var victory = localPlayers[i].checkWinningCondition(map);
-            if (victory) {
-                window.cancelAnimationFrame(this.stopMain);
-                this.gameOn(false);
-                toastr.success(localPlayers[i].victoryMessage() + ' - New game in 5 secs');
-
-                setTimeout(() => {
-                    this.initPlayers();
-                    this.main(performance.now());
-                    this.gameOn(true);
-                }, 5000);
-
-                break;
-            }*/
-        }
-
-        
+        this.currentPlayers().forEach(player => {
+            player.update(this.ctx, map, this.tickLength);
+		});
     }
 
     private redrawCanvas(tFrame: number) {
@@ -264,11 +248,11 @@ class Game {
     }
 
     private initMap() {
-        var size = <GameEntites.Size>{
+        var size = <SPATest.ServerCode.Size>{
             height: this.ctx.canvas.height,
             width: this.ctx.canvas.width
         };
-        this.currentMap(new Map(size));
+        this.currentMap(new ClientMap(size));
     }
 
     private initLocalPlayers() {
