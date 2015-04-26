@@ -14,6 +14,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
     size: GameEntites.Size;
     keyboardStates: KeyboardStates;
 	connectionId: string;
+	movement: number;
 
     isLocalPlayer: boolean;
     latestFrameUpdate: number;
@@ -28,6 +29,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
 		serverPlayer.startSize ? this.startSize = serverPlayer.startSize : this.startSize = <GameEntites.Size> { height: 10, width: 10 };
         this.size = this.startSize;
         this.latestFrameUpdate = 0;
+		this.movement = 0.25;
 
 		if (keyboardGroup != null && isLocalPlayer) {
 			this.keyboardStates = new KeyboardStates(keyboardGroup);
@@ -43,6 +45,24 @@ class ClientPlayer implements SPATest.ServerCode.Player {
         var newPosition = this.position;
 
         if (this.isLocalPlayer) {
+			if (this.keyboardStates.isRightKeyDown) {
+				this.movement += 0.1;
+			}
+
+			if (this.keyboardStates.isLeftKeyDown) {
+				this.movement -= 0.1;
+			}
+
+			var speed = (this.speed / tickLenght);
+			var newPos = <GameEntites.Vector2D> {
+				x: Math.round(Math.cos(this.movement) * speed + newPosition.x),
+				y: Math.round(Math.sin(this.movement) * speed + newPosition.y)
+			};
+			if (map.isValidPosition(newPos, this.size)) {
+				newPosition = newPos;
+			}
+
+			/*
             if (this.keyboardStates.isUpKeyDown) {
                 var newPos = <GameEntites.Vector2D> {
                     x: newPosition.x,
@@ -81,7 +101,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
                 if (map.isValidPosition(newPos, this.size)) {
                     newPosition = newPos;
                 }
-            }
+            }*/
         }
         this.position = newPosition;
     }

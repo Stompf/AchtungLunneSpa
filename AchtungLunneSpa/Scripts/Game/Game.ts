@@ -116,6 +116,7 @@ class Game {
 		});
 
 		$.connection.hub.start().done(() => {
+			this.gameOn(false);
 			this.connectionID = $.connection.hub.id;
             this.myHub.server.searchForGame();
             this.appendLine('Searching for game...');
@@ -124,6 +125,7 @@ class Game {
 
 	private handleInitGame(initGameEntity: GameEntites.InitGameEntity) {
 		this.appendLine('InitGame recived');
+		this.gameOn(false);
         this.currentPlayers.removeAll();
         this.networkHandler = new NetworkHandler();
 

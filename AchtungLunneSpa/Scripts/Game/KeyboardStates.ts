@@ -57,7 +57,7 @@ class KeyboardStates {
                 this.rightKeycode = KeyboardStates.D;
                 break;
             default:
-                alert("Keyboardgroup: " + keyboardGroup + " not found!");
+                console.error("Keyboardgroup: " + keyboardGroup + " not found!");
         }
     }
 
