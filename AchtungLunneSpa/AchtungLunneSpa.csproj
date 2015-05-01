@@ -296,7 +296,6 @@
     <TypeScriptCompile Include="Scripts\app\AppComponent.ts" />
     <TypeScriptCompile Include="Scripts\app\AppMain.ts" />
     <TypeScriptCompile Include="Scripts\require.config.ts" />
-    <TypeScriptCompile Include="Scripts\services\services.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout.validation\knockout.validation.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
