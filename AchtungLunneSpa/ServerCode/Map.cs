@@ -49,15 +49,34 @@ namespace SPATest.ServerCode
 
         public bool AddMapPart(Vector2D position, Player player)
         {
-            var key = ToMapPartKey(position.X, position.Y);
-            if (MapParts.ContainsKey(key))
+            for (int i = 0; i < PlayerSize; i++)
             {
-                MapParts[key].Color = player.Color;
-                MapParts[key].Owner = player.ConnectionId;
-                return true;
+                var key = ToMapPartKey(position.X + i, position.Y);
+                if (!MapParts.ContainsKey(key) || MapParts[key].Owner != null)
+                {
+                    return false;
+                }
+                else
+                {
+                    MapParts[key].Color = player.Color;
+                    MapParts[key].Owner = player.ConnectionId;
+                }
             }
-           
-            return false;
+
+            for (int i = 0; i < PlayerSize; i++)
+            {
+                var key = ToMapPartKey(position.X, position.Y + i);
+                if (!MapParts.ContainsKey(key) || MapParts[key].Owner != null)
+                {
+                    return false;
+                }
+                else
+                {
+                    MapParts[key].Color = player.Color;
+                    MapParts[key].Owner = player.ConnectionId;
+                }
+            }
+            return true;
         }
 
         public void UpdateMap(Player player)

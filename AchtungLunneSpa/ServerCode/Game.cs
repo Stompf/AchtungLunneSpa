@@ -25,13 +25,13 @@ namespace SPATest.ServerCode
 			this.player1.GameGroupID = GroupReference;
 			this.player1.Team = Team.RED;
             this.player1.Color = "red";
-			this.player1.Position = CurrentMap.GetRandomPosition();
+			
 
 			this.player2 = player2;
 			this.player2.Team = Team.BLUE;
             this.player2.Color = "blue";
             this.player2.GameGroupID = GroupReference;
-			this.player2.Position = CurrentMap.GetRandomPosition();
+			
 
 			myHub.Groups.Add(player1.ConnectionId, GroupReference);
 			myHub.Groups.Add(player2.ConnectionId, GroupReference);
@@ -40,7 +40,13 @@ namespace SPATest.ServerCode
 
 		public void InitGame()
 		{
-			GroupManager.initGame(new InitGameEntity { Map = CurrentMap, Players = new Player[] { player1, player2 } });
+            CurrentMap.ResetMapParts();
+            player1.Position = CurrentMap.GetRandomPosition();
+            player1.IsAlive = true;
+
+            player2.Position = CurrentMap.GetRandomPosition();
+            player2.IsAlive = true;
+            GroupManager.initGame(new InitGameEntity { Map = CurrentMap, Players = new Player[] { player1, player2 } });
 		}
 
 		public void ReadyRecived(Player player)
@@ -61,7 +67,8 @@ namespace SPATest.ServerCode
 
 			timer = new System.Timers.Timer(33);
 			timer.Elapsed += new ElapsedEventHandler(SendUpdate);
-			GroupManager.newGameStart(new NewGameStartEntity() { StartTime = DateTime.Now.AddSeconds(5) });	
+			GroupManager.newGameStart(new NewGameStartEntity() { StartTime = DateTime.Now.AddSeconds(5) });
+            Thread.Sleep(5000);
 			timer.Enabled = true;
 		}
 
@@ -93,13 +100,18 @@ namespace SPATest.ServerCode
         public void UpdateRecived(string connectionID, SendUpdateGameEntity entity)
         {
             var player = GetPlayer(connectionID);
-            if (player != null && entity.Frame > player.LatestFrameUpdate)
+            if (player != null && entity.Frame > player.LatestFrameUpdate && player.Position.X != entity.Player.Position.X && player.Position.Y != entity.Player.Position.Y)
             {
                 lock (updateLock)
                 {
                     player.Position = entity.Player.Position;
                     player.LatestFrameUpdate = entity.Frame;
-                    CurrentMap.AddMapPart(player.Position, player);
+                    if(timer != null && timer.Enabled && !CurrentMap.AddMapPart(player.Position, player))
+                    {
+                        player.IsAlive = false;
+                        timer.Enabled = false;
+                        SendUpdate(this, EventArgs.Empty as ElapsedEventArgs);
+                    }
                 }
             }
         }

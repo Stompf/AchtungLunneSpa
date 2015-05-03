@@ -175,6 +175,12 @@ class Game {
                 playerWithId[0].position = player.position;
             }
             this.currentMap().addMapPart(player);
+
+            if (!player.isAlive && player.isAlive !== playerWithId[0].isAlive) {
+                playerWithId[0].isAlive = false;
+                this.appendLine('Player: ' + player.color + ' died!');
+                this.gameOn(false);
+            }
 		});
 	}
 
@@ -236,10 +242,6 @@ class Game {
 		window.addEventListener("blur",(e) => { this.onBlur(); }, false);
         window.addEventListener("keydown", (e) => { this.onKeyDown(e); }, false);
         window.addEventListener("keyup", (e) => { this.onKeyUp(e); }, false);
-
-        window.addEventListener('mousedown', (e: MouseEvent) => {
-
-        });
 
         this.appendLine('Canvas init done');
     }
