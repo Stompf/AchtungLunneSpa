@@ -16,7 +16,6 @@ declare module SPATest.ServerCode {
 	}
 	interface Map {
 		mapSize: SPATest.ServerCode.Size;
-		mapParts: System.Collections.Generic.KeyValuePair<string, SPATest.ServerCode.MapPart>[];
 		tick: number;
 		playerSize: number;
 		startPositionPadding: number;
@@ -24,12 +23,6 @@ declare module SPATest.ServerCode {
 	interface Size {
 		height: number;
 		width: number;
-	}
-	interface MapPart {
-		x: number;
-		y: number;
-		owner: string;
-		color: string;
 	}
 	interface Player {
 		connectionId: string;
@@ -51,11 +44,11 @@ declare module SPATest.ServerCode {
 		player: SPATest.ServerCode.Player;
 		frame: number;
 	}
-}
-declare module System.Collections.Generic {
-	interface KeyValuePair<TKey, TValue> {
-		key: TKey;
-		value: TValue;
+	interface MapPart {
+		x: number;
+		y: number;
+		owner: string;
+		color: string;
 	}
 }
 

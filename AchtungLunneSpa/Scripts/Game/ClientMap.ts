@@ -2,51 +2,38 @@
 import ClientPlayer = require("./ClientPlayer");
 import utils = require('../common/Utils');
 import ko = require('knockout');
+import collections = require('../collections');
 
 class ClientMap {
-	map: SPATest.ServerCode.Map;
+    mapSize: SPATest.ServerCode.Size;
+    mapParts: collections.Dictionary<string, SPATest.ServerCode.MapPart>;
+    playerSize: number;
+    startPositionPadding: number;
 
-    constructor(size: SPATest.ServerCode.Size) {
-		this.map = <SPATest.ServerCode.Map> {
-			mapSize: size,
-			mapParts: new Array<System.Collections.Generic.KeyValuePair<string, SPATest.ServerCode.MapPart>>(),
-			tick: 0
-		};
+    constructor(serverMap: SPATest.ServerCode.Map) {
+        this.mapSize = serverMap.mapSize;
+        this.playerSize = serverMap.playerSize;
+        this.startPositionPadding = serverMap.startPositionPadding;
+        this.mapParts = new collections.Dictionary<string, SPATest.ServerCode.MapPart>();
+
 		this.resetMapParts();
     }
 
-	resetMapParts() {
-		this.map.mapParts = new Array<System.Collections.Generic.KeyValuePair<string, SPATest.ServerCode.MapPart>>();
-		for (var x = 0; x < this.map.mapSize.width / this.map.playerSize; x++) {
-			for (var y = 0; y < this.map.mapSize.height / this.map.playerSize; y++) {
-				var mapPart = <SPATest.ServerCode.MapPart> {
-					color: '#FFFFFF',
-					owner: null,
-					x: x,
-					y: y
-				}; 
-
-				var keyValuePair = <System.Collections.Generic.KeyValuePair<string, SPATest.ServerCode.MapPart>>{
-					key: this.toMapPartKey(x, y),
-					value: mapPart
-				};
-				this.map.mapParts.push(keyValuePair);
-			}
-		}
+    resetMapParts() {
+        this.mapParts.clear();
 	}
 
     render(ctx: CanvasRenderingContext2D, deltaTick: number) {
-		if (this.map == null || this.map.mapParts == null) {
+		if (this.mapParts == null) {
 			return;
 		}
 
-        for (var part in this.map.mapParts) {
-            var mapPart = <SPATest.ServerCode.MapPart><any>this.map.mapParts[part];
+        this.mapParts.values().forEach(mapPart => {
             if (mapPart.color && mapPart.color != '#FFFFFF') {
                 ctx.fillStyle = mapPart.color;
-                ctx.fillRect(mapPart.x, mapPart.y, this.map.playerSize, this.map.playerSize);
+                ctx.fillRect(mapPart.x, mapPart.y, this.playerSize, this.playerSize);
             }	
-		}
+        });
     }
 
     isValidPosition(position: SPATest.ServerCode.Vector2D, objectSize: SPATest.ServerCode.Size) {
@@ -54,8 +41,8 @@ class ClientMap {
     }
 
 	getRandomStartPosition() {
-		var randX = utils.getRandomInt(this.map.startPositionPadding, this.map.mapSize.width - this.map.startPositionPadding);
-		var randY = utils.getRandomInt(this.map.startPositionPadding, this.map.mapSize.height - this.map.startPositionPadding);
+		var randX = utils.getRandomInt(this.startPositionPadding, this.mapSize.width - this.startPositionPadding);
+		var randY = utils.getRandomInt(this.startPositionPadding, this.mapSize.height - this.startPositionPadding);
 		return <SPATest.ServerCode.Vector2D> {
 			x: randX,
 			y: randY
@@ -64,12 +51,22 @@ class ClientMap {
 
 	toMapPartKey(X: number, Y: number) {
 		return X + '_' + Y;
-	}
+    }
+
+    addMapPart(player: SPATest.ServerCode.Player) {
+        var key = this.toMapPartKey(player.position.x, player.position.y);
+        this.mapParts.setValue(key, <SPATest.ServerCode.MapPart> {
+            color: player.color,
+            owner: player.connectionId,
+            x: player.position.x,
+            y: player.position.y
+        });
+    }
 
     private isInBounds(position: SPATest.ServerCode.Vector2D, objectSize: SPATest.ServerCode.Size) {
         return position.x >= 0 &&
-            position.x <= (this.map.mapSize.width - objectSize.width) &&
-            position.y >= 0 && position.y <= (this.map.mapSize.height - objectSize.height) ;
+            position.x <= (this.mapSize.width - objectSize.width) &&
+            position.y >= 0 && position.y <= (this.mapSize.height - objectSize.height) ;
     }
 }
 export = ClientMap;

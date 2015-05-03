@@ -10,7 +10,7 @@ namespace SPATest.ServerCode
 	public class Map
 	{
 		public Size MapSize { get; }
-		public Dictionary<string, MapPart> MapParts { get; }
+		private Dictionary<string, MapPart> MapParts { get; }
 		public int Tick { get; set; }
 		public int PlayerSize { get; }
 
@@ -60,7 +60,17 @@ namespace SPATest.ServerCode
             return false;
         }
 
-		public string ToMapPartKey(int X, int Y)
+        public void UpdateMap(Player player)
+        {
+            var key = ToMapPartKey(player.Position.X, player.Position.Y);
+            if (MapParts.ContainsKey(key))
+            {
+                MapParts[key].Owner = player.ConnectionId;
+                MapParts[key].Color = player.Color;
+            }
+        }
+
+        public string ToMapPartKey(int X, int Y)
 		{
 			return X + "_" + Y;
 		}

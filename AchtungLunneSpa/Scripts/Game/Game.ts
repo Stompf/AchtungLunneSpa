@@ -139,8 +139,8 @@ class Game {
 				clientPlayer = new ClientPlayer(player, null, false);
 			}
 			this.currentPlayers.push(clientPlayer);
-		});
-		this.initMap();
+        });
+        this.initMap(initGameEntity.map);
 		this.main(performance.now());
 		this.myHub.server.sendReady();
 		this.appendLine('SendReady sent');
@@ -172,8 +172,9 @@ class Game {
             });
 
             if (playerWithId.length > 0 && ((!isLocalPlayer && playerWithId[0].latestFrameUpdate < player.latestFrameUpdate) || !this.networkHandler.checkUpdateFromServer(player))) {
-				playerWithId[0].position = player.position;
-			}
+                playerWithId[0].position = player.position;
+            }
+            this.currentMap().addMapPart(player);
 		});
 	}
 
@@ -243,12 +244,12 @@ class Game {
         this.appendLine('Canvas init done');
     }
 
-    private initMap() {
+    private initMap(map: SPATest.ServerCode.Map) {
         var size = <SPATest.ServerCode.Size>{
             height: this.ctx.canvas.height,
             width: this.ctx.canvas.width
         };
-        this.currentMap(new ClientMap(size));
+        this.currentMap(new ClientMap(map));
     }
 
     private initLocalPlayers() {
@@ -265,7 +266,17 @@ class Game {
 			position: this.currentMap().getRandomStartPosition()
 		};
         var player2 = new ClientPlayer(serverPlayer2, KeyboardGroup.Arrows, true);
-		this.initMap();
+        var settings = <SPATest.ServerCode.Map> {
+            mapSize: <SPATest.ServerCode.Size>{
+                height: 500,
+                width: 1000
+            },
+            playerSize: 10,
+            startPositionPadding: 10,
+            tick: 0
+        };
+
+        this.initMap(settings);
         this.currentPlayers([player1, player2]);
         this.currentLocalPlayers(this.currentPlayers());
     }

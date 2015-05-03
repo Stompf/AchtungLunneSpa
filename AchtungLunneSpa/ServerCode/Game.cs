@@ -59,10 +59,10 @@ namespace SPATest.ServerCode
 				timer.Dispose();
 			}
 
-			timer = new System.Timers.Timer(67);
+			timer = new System.Timers.Timer(33);
 			timer.Elapsed += new ElapsedEventHandler(SendUpdate);
 			GroupManager.newGameStart(new NewGameStartEntity() { StartTime = DateTime.Now.AddSeconds(5) });	
-			timer.Enabled = true; // Enable it
+			timer.Enabled = true;
 		}
 
 		public void EndGame(MyHub myHub)
@@ -122,12 +122,7 @@ namespace SPATest.ServerCode
 
 		public void UpdateMap(Player player)
 		{
-			var key = CurrentMap.ToMapPartKey(player.Position.X, player.Position.Y);
-            if (CurrentMap.MapParts.ContainsKey(key))
-			{
-				CurrentMap.MapParts[key].Owner = player.ConnectionId;
-				CurrentMap.MapParts[key].Color = player.Color;
-			}
+			
 		}
 	}
 }
