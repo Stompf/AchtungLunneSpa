@@ -24,11 +24,13 @@ namespace SPATest.ServerCode
 			this.player1 = player1;
 			this.player1.GameGroupID = GroupReference;
 			this.player1.Team = Team.RED;
+            this.player1.Color = "red";
 			this.player1.Position = CurrentMap.GetRandomPosition();
 
 			this.player2 = player2;
 			this.player2.Team = Team.BLUE;
-			this.player2.GameGroupID = GroupReference;
+            this.player2.Color = "blue";
+            this.player2.GameGroupID = GroupReference;
 			this.player2.Position = CurrentMap.GetRandomPosition();
 
 			myHub.Groups.Add(player1.ConnectionId, GroupReference);
@@ -57,10 +59,9 @@ namespace SPATest.ServerCode
 				timer.Dispose();
 			}
 
-			timer = new System.Timers.Timer(66);
+			timer = new System.Timers.Timer(67);
 			timer.Elapsed += new ElapsedEventHandler(SendUpdate);
-			GroupManager.newGameStart(new NewGameStartEntity() { StartTime = DateTime.Now.AddSeconds(5) });
-			Thread.Sleep(5000);		
+			GroupManager.newGameStart(new NewGameStartEntity() { StartTime = DateTime.Now.AddSeconds(5) });	
 			timer.Enabled = true; // Enable it
 		}
 
@@ -84,7 +85,7 @@ namespace SPATest.ServerCode
 				UpdateMap(player2);
 				CurrentMap.Tick++;
 
-                var updateEntity = new UpdateGameEntity { Map = CurrentMap, Players = new Player[] { player1, player2 } };
+                var updateEntity = new UpdateGameEntity { Players = new Player[] { player1, player2 } };
                 GroupManager.updateGame(updateEntity);
             }
         }
@@ -98,6 +99,7 @@ namespace SPATest.ServerCode
                 {
                     player.Position = entity.Player.Position;
                     player.LatestFrameUpdate = entity.Frame;
+                    CurrentMap.AddMapPart(player.Position, player);
                 }
             }
         }

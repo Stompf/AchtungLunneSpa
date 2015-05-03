@@ -40,22 +40,13 @@ class ClientMap {
 			return;
 		}
 
-		var mapArray = new Array<System.Collections.Generic.KeyValuePair<string, SPATest.ServerCode.MapPart>>(); 
-		for (var part in this.map.mapParts) {
-			mapArray.push(<System.Collections.Generic.KeyValuePair<string, SPATest.ServerCode.MapPart>>{
-				key: part,
-				value: <SPATest.ServerCode.MapPart><any>this.map.mapParts[part]
-			});			
+        for (var part in this.map.mapParts) {
+            var mapPart = <SPATest.ServerCode.MapPart><any>this.map.mapParts[part];
+            if (mapPart.color && mapPart.color != '#FFFFFF') {
+                ctx.fillStyle = mapPart.color;
+                ctx.fillRect(mapPart.x, mapPart.y, this.map.playerSize, this.map.playerSize);
+            }	
 		}
-
-		mapArray.forEach(mapPart => {
-			if (mapPart.value.color !== '#FFFFFF') {
-				var k = "k";
-			}
-
-			ctx.fillStyle = mapPart.value.color;
-			ctx.fillRect(mapPart.value.x, mapPart.value.y, this.map.playerSize, this.map.playerSize);
-		});
     }
 
     isValidPosition(position: SPATest.ServerCode.Vector2D, objectSize: SPATest.ServerCode.Size) {

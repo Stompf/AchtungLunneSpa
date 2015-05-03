@@ -38,14 +38,27 @@ namespace SPATest.ServerCode
 		public void ResetMapParts()
 		{
 			MapParts.Clear();
-			for (int x = 0; x < MapSize.Width; x += PlayerSize)
-			{
-				for (int y = 0; y < MapSize.Height; y += PlayerSize)
-				{
-					MapParts[ToMapPartKey(x, y)] = new MapPart(x, y);
-				}
-			}
+            for (int x = 0; x < MapSize.Width; x++)
+            {
+                for (int y = 0; y < MapSize.Height; y++)
+                {
+                    MapParts[ToMapPartKey(x, y)] = new MapPart(x, y);
+                }
+            }
 		}
+
+        public bool AddMapPart(Vector2D position, Player player)
+        {
+            var key = ToMapPartKey(position.X, position.Y);
+            if (MapParts.ContainsKey(key))
+            {
+                MapParts[key].Color = player.Color;
+                MapParts[key].Owner = player.ConnectionId;
+                return true;
+            }
+           
+            return false;
+        }
 
 		public string ToMapPartKey(int X, int Y)
 		{

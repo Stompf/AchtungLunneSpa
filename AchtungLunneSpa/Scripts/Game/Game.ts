@@ -162,10 +162,6 @@ class Game {
 			return;
 		}
 
-		if (updateGameEntity.map.tick > this.currentMap().map.tick) {
-			this.currentMap().map = updateGameEntity.map;
-		}
-
 		updateGameEntity.players.forEach(player => {
 			var playerWithId = this.currentPlayers().filter(currPlayer => {
 				return currPlayer.connectionId === player.connectionId;
