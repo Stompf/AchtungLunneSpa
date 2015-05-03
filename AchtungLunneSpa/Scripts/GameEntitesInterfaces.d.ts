@@ -25,6 +25,7 @@ declare module SPATest.ServerCode {
 		width: number;
 	}
 	interface Player {
+		lastPositionVector: SPATest.ServerCode.BoundingBox;
 		isAlive: boolean;
 		connectionId: string;
 		position: SPATest.ServerCode.Vector2D;
@@ -32,6 +33,10 @@ declare module SPATest.ServerCode {
 		team: SPATest.ServerCode.Team;
 		startSize: SPATest.ServerCode.Size;
 		latestFrameUpdate: number;
+	}
+	interface BoundingBox {
+		topLeft: SPATest.ServerCode.Vector2D;
+		bottomRight: SPATest.ServerCode.Vector2D;
 	}
 	interface Vector2D {
 		x: number;

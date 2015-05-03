@@ -22,6 +22,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TypeScriptToolsVersion>1.4</TypeScriptToolsVersion>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -283,6 +284,7 @@
     </Content>
     <Content Include="Scripts\jquery-2.1.3.min.map" />
     <Content Include="Scripts\knockout.validation.min.js.map" />
+    <Compile Include="ServerCode\BoundingBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

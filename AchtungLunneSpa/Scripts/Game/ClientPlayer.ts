@@ -20,9 +20,11 @@ class ClientPlayer implements SPATest.ServerCode.Player {
     latestFrameUpdate: number;
     speed: number = 250;
     isAlive: boolean;
+    lastPositionVector: SPATest.ServerCode.BoundingBox;
 
     constructor(serverPlayer: SPATest.ServerCode.Player, keyboardGroup: KeyboardGroup, isLocalPlayer: boolean) {
         this.position = serverPlayer.position;
+        this.lastPositionVector = serverPlayer.lastPositionVector;
         this.team = serverPlayer.team;
         this.color = this.setColor(this.team);       
         this.isLocalPlayer = isLocalPlayer;
@@ -60,9 +62,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
 				x: Math.round(Math.cos(this.movement) * speed + newPosition.x),
 				y: Math.round(Math.sin(this.movement) * speed + newPosition.y)
 			};
-			if (map.isValidPosition(newPos, this.size)) {
-				newPosition = newPos;
-			}
+			newPosition = newPos;
         }
         this.position = newPosition;
     }

@@ -42,9 +42,11 @@ namespace SPATest.ServerCode
 		{
             CurrentMap.ResetMapParts();
             player1.Position = CurrentMap.GetRandomPosition();
+            player1.LastPositionVector = new BoundingBox(player1.Position, new Vector2D() { X = player1.Position.X + CurrentMap.PlayerSize, Y = player1.Position.Y + CurrentMap.PlayerSize });
             player1.IsAlive = true;
 
             player2.Position = CurrentMap.GetRandomPosition();
+            player2.LastPositionVector = new BoundingBox(player2.Position, new Vector2D() { X = player2.Position.X + CurrentMap.PlayerSize, Y = player2.Position.Y + CurrentMap.PlayerSize });
             player2.IsAlive = true;
             GroupManager.initGame(new InitGameEntity { Map = CurrentMap, Players = new Player[] { player1, player2 } });
 		}
@@ -68,7 +70,6 @@ namespace SPATest.ServerCode
 			timer = new System.Timers.Timer(33);
 			timer.Elapsed += new ElapsedEventHandler(SendUpdate);
 			GroupManager.newGameStart(new NewGameStartEntity() { StartTime = DateTime.Now.AddSeconds(5) });
-            Thread.Sleep(5000);
 			timer.Enabled = true;
 		}
 
