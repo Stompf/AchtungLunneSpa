@@ -15,6 +15,8 @@ namespace SPATest.ServerCode
         [TsIgnore]
         public bool IsReady { get; set; }
 
+
+        public bool IsAlive { get; set; }
         public string ConnectionId { get; }
         public Vector2D Position { get; set; }
         public string Color { get; set; }
@@ -28,6 +30,7 @@ namespace SPATest.ServerCode
 		public Player(string connectionId)
 		{
 			ConnectionId = connectionId;
+            IsAlive = true;
 		}
 
 

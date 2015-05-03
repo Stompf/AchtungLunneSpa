@@ -19,6 +19,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
     isLocalPlayer: boolean;
     latestFrameUpdate: number;
     speed: number = 250;
+    isAlive: boolean;
 
     constructor(serverPlayer: SPATest.ServerCode.Player, keyboardGroup: KeyboardGroup, isLocalPlayer: boolean) {
         this.position = serverPlayer.position;
@@ -29,7 +30,8 @@ class ClientPlayer implements SPATest.ServerCode.Player {
 		serverPlayer.startSize ? this.startSize = serverPlayer.startSize : this.startSize = <SPATest.ServerCode.Size> { height: 10, width: 10 };
         this.size = this.startSize;
         this.latestFrameUpdate = 0;
-		this.movement = 0.25;
+        this.movement = 0.25;
+        this.isAlive = true;
 
 		if (keyboardGroup != null && isLocalPlayer) {
 			this.keyboardStates = new KeyboardStates(keyboardGroup);
@@ -61,47 +63,6 @@ class ClientPlayer implements SPATest.ServerCode.Player {
 			if (map.isValidPosition(newPos, this.size)) {
 				newPosition = newPos;
 			}
-
-			/*
-            if (this.keyboardStates.isUpKeyDown) {
-                var newPos = <SPATest.ServerCode.Vector2D> {
-                    x: newPosition.x,
-                    y: newPosition.y - (this.speed / tickLenght)
-                };
-                if (map.isValidPosition(newPos, this.size)) {
-                    newPosition = newPos;
-                }
-            }
-
-            if (this.keyboardStates.isDownKeyDown) {
-                var newPos = <SPATest.ServerCode.Vector2D> {
-                    x: newPosition.x,
-                    y: newPosition.y + (this.speed / tickLenght)
-                };
-                if (map.isValidPosition(newPos, this.size)) {
-                    newPosition = newPos;
-                }
-            }
-
-            if (this.keyboardStates.isLeftKeyDown) {
-                var newPos = <SPATest.ServerCode.Vector2D> {
-                    x: newPosition.x - (this.speed / tickLenght),
-                    y: newPosition.y
-                };
-                if (map.isValidPosition(newPos, this.size)) {
-                    newPosition = newPos;
-                }
-            }
-
-            if (this.keyboardStates.isRightKeyDown) {
-                var newPos = <SPATest.ServerCode.Vector2D> {
-                    x: newPosition.x + (this.speed / tickLenght),
-                    y: newPosition.y
-                };
-                if (map.isValidPosition(newPos, this.size)) {
-                    newPosition = newPos;
-                }
-            }*/
         }
         this.position = newPosition;
     }

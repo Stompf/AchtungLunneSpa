@@ -25,6 +25,7 @@ declare module SPATest.ServerCode {
 		width: number;
 	}
 	interface Player {
+		isAlive: boolean;
 		connectionId: string;
 		position: SPATest.ServerCode.Vector2D;
 		color: string;
