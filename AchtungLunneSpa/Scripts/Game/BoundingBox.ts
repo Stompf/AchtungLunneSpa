@@ -1,4 +1,4 @@
-﻿class BoundingBox {
+﻿class BoundingBox implements SPATest.ServerCode.BoundingBox {
 
     topLeft: SPATest.ServerCode.Vector2D;
     bottomRight: SPATest.ServerCode.Vector2D;

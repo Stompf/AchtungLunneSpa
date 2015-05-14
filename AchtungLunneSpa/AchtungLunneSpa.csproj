@@ -285,6 +285,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Scripts\knockout.validation.min.js.map" />
+    <Compile Include="ServerCode\BoundingBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

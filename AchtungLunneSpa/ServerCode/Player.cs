@@ -15,7 +15,7 @@ namespace SPATest.ServerCode
         [TsIgnore]
         public bool IsReady { get; set; }
 
-
+        public BoundingBox LastPositionVector { get; set; }
         public bool IsAlive { get; set; }
         public string ConnectionId { get; }
         public Vector2D Position { get; set; }
