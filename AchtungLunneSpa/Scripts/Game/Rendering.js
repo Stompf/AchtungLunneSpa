@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Rendering;
     (function (Rendering) {
         function render(ctx, players, deltaTick, map) {

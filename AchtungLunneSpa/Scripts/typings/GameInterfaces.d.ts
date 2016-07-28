@@ -19,7 +19,3 @@ interface MyHub {
 interface SignalR {
 	myHub: MyHub;
 }
-
-declare module 'toastr' {
-    export = toastr;
-}

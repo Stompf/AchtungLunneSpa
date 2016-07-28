@@ -1,5 +1,5 @@
 module SPATest.ServerCode {
-	export enum Team {
+	export const enum Team {
 		BLUE = 0,
 		RED = 1
 	}
