@@ -1,6 +1,4 @@
-﻿import KeyboardGroup = require("./KeyboardGroup");
-
-class KeyboardStates {
+﻿class KeyboardStates {
 
     static W = 87;
     static S = 83;
@@ -22,7 +20,7 @@ class KeyboardStates {
     isLeftKeyDown: boolean;
     isRightKeyDown: boolean;
 
-    constructor(keyboardGroup: KeyboardGroup) {
+    constructor(keyboardGroup: LunnEngine.KeyboardGroup) {
         this.setKeyboard(keyboardGroup);
     }
 
@@ -42,15 +40,15 @@ class KeyboardStates {
 		this.isRightKeyDown = false;
 	}
 
-    private setKeyboard(keyboardGroup: KeyboardGroup) {
+    private setKeyboard(keyboardGroup: LunnEngine.KeyboardGroup) {
         switch (keyboardGroup) {
-            case KeyboardGroup.Arrows:
+            case LunnEngine.KeyboardGroup.Arrows:
                 this.upKeycode = KeyboardStates.ArrowUp;
                 this.downKeycode = KeyboardStates.ArrowDown;
                 this.leftKeycode = KeyboardStates.ArrowLeft;
                 this.rightKeycode = KeyboardStates.ArrowRight;
                 break;
-            case KeyboardGroup.WSAD:
+            case LunnEngine.KeyboardGroup.WSAD:
                 this.upKeycode = KeyboardStates.W;
                 this.downKeycode = KeyboardStates.S;
                 this.leftKeycode = KeyboardStates.A;

@@ -256,16 +256,15 @@
     <TypeScriptCompile Include="Scripts\Enums.ts">
       <DependentUpon>GameEntitesInterfaces.tt</DependentUpon>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\game\BoundingBox.ts" />
+    <TypeScriptCompile Include="Scripts\LunnEngine\BoundingBox.ts" />
     <TypeScriptCompile Include="Scripts\game\Game.ts" />
-    <TypeScriptCompile Include="Scripts\game\KeyboardGroup.ts" />
-    <TypeScriptCompile Include="Scripts\game\KeyboardStates.ts" />
+    <TypeScriptCompile Include="Scripts\LunnEngine\KeyboardStates.ts" />
     <TypeScriptCompile Include="Scripts\game\ClientMap.ts" />
     <TypeScriptCompile Include="Scripts\game\ClientPlayer.ts" />
     <TypeScriptCompile Include="Scripts\game\NetworkHandler.ts" />
     <TypeScriptCompile Include="Scripts\game\Rendering.ts" />
     <TypeScriptCompile Include="Scripts\game\Team.ts" />
-    <TypeScriptCompile Include="Scripts\game\ToastrOptions.ts" />
+    <TypeScriptCompile Include="Scripts\common\ToastrOptions.ts" />
     <TypeScriptCompile Include="Scripts\GameEntitesInterfaces.d.ts">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -277,6 +276,7 @@
     <TypeScriptCompile Include="Scripts\typings\knockout.validation\knockout.validation.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\tests\jasmine.extensions.d.ts" />
+    <TypeScriptCompile Include="Scripts\LunnEngine\LunnEngine.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment-node.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\requirejs\require.d.ts" />

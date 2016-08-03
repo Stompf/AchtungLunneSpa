@@ -1,7 +1,6 @@
 ﻿import ko = require("knockout");
 import ClientPlayer = require("./ClientPlayer");
 import ClientMap = require("./ClientMap");
-import KeyboardGroup = require("./KeyboardGroup");
 import Rendering = require("./Rendering");
 import Team = require("./Team");
 import toastr = require("toastr");
@@ -20,7 +19,7 @@ class Game {
     gameOn: KnockoutObservable<boolean>;
     networkHandler: NetworkHandler;
 
-    stopMain: number;
+    mainAnimationReference: number;
     lastRender: number;
     lastTick: number = performance.now();
     tickLength: number = 50;
@@ -30,7 +29,7 @@ class Game {
 
     private textArea: KnockoutObservable<string>;
 
-    constructor(ctx: CanvasRenderingContext2D, textArea: KnockoutObservable<string>) {
+    constructor(ctx: CanvasRenderingContext2D, textArea: KnockoutObservable<string>, localgame: boolean = true) {
 		this.currentLocalPlayers = ko.observableArray<ClientPlayer>();
         this.currentPlayers = ko.observableArray<ClientPlayer>();
         this.currentMap = ko.observable<ClientMap>();
@@ -41,7 +40,12 @@ class Game {
         this.ctx = ctx;
         if (this.ctx != null) {
             this.initCanvas();
-			this.searchForGame();
+
+            if (localgame) {
+                this.startLocalGame();
+            } else {
+                this.searchForGame();
+            }
         } else {
             alert("Cannot find canvas!");
         }
@@ -82,6 +86,19 @@ class Game {
         }
     }
 
+    private startLocalGame() {
+        this.appendLine('Starting local game...');
+        this.initLocalMap();
+        this.initLocalPlayers();
+        this.main(performance.now());
+
+        const startTimeInSec = 3;
+        this.appendLine('Starting in ' + startTimeInSec + ' seconds...');
+        setTimeout(() => {
+            this.gameOn(true);
+        }, startTimeInSec * 1000);
+    }
+
 	private searchForGame() {
 		this.myHub = $.connection.myHub;
 
@@ -94,7 +111,7 @@ class Game {
 		this.myHub.client.endGame = (message) => {
 			utils.appendNewLine(this.textArea, message);
 			this.currentPlayers.removeAll();
-			window.cancelAnimationFrame(this.stopMain);
+			window.cancelAnimationFrame(this.mainAnimationReference);
 			this.gameOn(false);
 			this.myHub.server.searchForGame();
             this.appendLine('Searching for game...');
@@ -132,7 +149,7 @@ class Game {
 		initGameEntity.players.forEach(player => {
 			var clientPlayer: ClientPlayer;
 			if (player.connectionId === this.connectionID) {				
-				clientPlayer = new ClientPlayer(player, KeyboardGroup.WSAD, true);
+				clientPlayer = new ClientPlayer(player, LunnEngine.KeyboardGroup.WSAD, true);
 				this.appendLine('YOU ARE: <b><span style="color:' + clientPlayer.color + '">' + clientPlayer.color.toUpperCase() + '</span></b>');
 				this.currentLocalPlayers([clientPlayer]);
 			} else {
@@ -185,7 +202,7 @@ class Game {
 	}
 
     private main = (tFrame: number) => {
-        this.stopMain = window.requestAnimationFrame(this.main);
+        this.mainAnimationReference = window.requestAnimationFrame(this.main);
         var nextTick = this.lastTick + this.tickLength;
         var numTicks = 0;
 
@@ -198,8 +215,14 @@ class Game {
         this.redrawCanvas(tFrame);
         this.lastRender = tFrame;
 
+        if (this.networkHandler != null) {
+            this.sendNetworkUpdates(tFrame);
+        }
+    }
+
+    private sendNetworkUpdates(tFrame: number) {
         this.currentLocalPlayers().forEach(localPlayer => {
-            var updateObj = < SPATest.ServerCode.SendUpdateGameEntity > {
+            var updateObj = <SPATest.ServerCode.SendUpdateGameEntity>{
                 player: localPlayer,
                 frame: tFrame
             };
@@ -220,14 +243,30 @@ class Game {
     }
 
     private update(lastTick: number) {
-        if (this.gameOn() === false) {
+        if (!this.gameOn()) {
             return;
         }
-
-        var map = this.currentMap();
-        this.currentPlayers().forEach(player => {
+        
+        const map = this.currentMap();
+        this.currentLocalPlayers().forEach(player => {
             player.update(this.ctx, map, this.tickLength);
-		});
+        });
+
+        if (this.networkHandler == null) {
+            this.currentMap().update(this.currentLocalPlayers(), this.textArea);
+
+            const alivePlayers = this.currentPlayers().filter(player => {
+                return player.isAlive;
+            });
+
+            if (alivePlayers.length === 1) {
+               // utils.appendNewLine(this.textArea, alivePlayers[0].Name + ' won!');
+               // cancelAnimationFrame(this.mainAnimationReference);
+            } else if (alivePlayers.length === 0) {
+                utils.appendNewLine(this.textArea, 'Draw!');
+                cancelAnimationFrame(this.mainAnimationReference);
+            }
+        }
     }
 
     private redrawCanvas(tFrame: number) {
@@ -258,29 +297,35 @@ class Game {
         //Player 1
 		var serverPlayer1 = <SPATest.ServerCode.Player>{
 			team: SPATest.ServerCode.Team.BLUE,
-			position: this.currentMap().getRandomStartPosition()
+            position: this.currentMap().getRandomStartPosition(),
+            connectionId: 'player1'
 		};
-        var player1 = new ClientPlayer(serverPlayer1, KeyboardGroup.WSAD, true);
+        var player1 = new ClientPlayer(serverPlayer1,  LunnEngine.KeyboardGroup.WSAD, true);
 
         //Player 2
 		var serverPlayer2 = <SPATest.ServerCode.Player>{
 			team: SPATest.ServerCode.Team.RED,
-			position: this.currentMap().getRandomStartPosition()
-		};
-        var player2 = new ClientPlayer(serverPlayer2, KeyboardGroup.Arrows, true);
-        var settings = <SPATest.ServerCode.Map> {
+            position: this.currentMap().getRandomStartPosition(),
+            connectionId: 'player2'
+        };
+        var player2 = new ClientPlayer(serverPlayer2, LunnEngine.KeyboardGroup.Arrows, true);
+ 
+        this.currentPlayers([player1, player2]);
+        this.currentLocalPlayers(this.currentPlayers());
+    }
+
+    private initLocalMap() {
+        var settings = <SPATest.ServerCode.Map>{
             mapSize: <SPATest.ServerCode.Size>{
-                height: 500,
-                width: 1000
+                height: this.ctx.canvas.height,
+                width: this.ctx.canvas.width
             },
             playerSize: 10,
-            startPositionPadding: 10,
+            startPositionPadding: 100,
             tick: 0
         };
 
         this.initMap(settings);
-        this.currentPlayers([player1, player2]);
-        this.currentLocalPlayers(this.currentPlayers());
     }
 
 	private appendLine(message: string) {

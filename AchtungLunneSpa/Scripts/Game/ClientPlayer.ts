@@ -1,14 +1,15 @@
-﻿import KeyboardStates = require("./KeyboardStates");
-import KeyboardGroup = require("./KeyboardGroup");
+﻿import KeyboardStates = require("../LunnEngine/KeyboardStates");
 import ClientMap = require("./ClientMap");
 import Team = require("./Team");
 import collection = require('collections');
+import BoundingBox = require('../LunnEngine/BoundingBox');
 
 class ClientPlayer implements SPATest.ServerCode.Player {
 
     startSize: SPATest.ServerCode.Size;
 
     position: SPATest.ServerCode.Vector2D;
+    previousPosition: BoundingBox;
     color: string;
     team: SPATest.ServerCode.Team;
     size: SPATest.ServerCode.Size;
@@ -22,7 +23,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
     isAlive: boolean;
     lastPositionVector: SPATest.ServerCode.BoundingBox;
 
-    constructor(serverPlayer: SPATest.ServerCode.Player, keyboardGroup: KeyboardGroup, isLocalPlayer: boolean) {
+    constructor(serverPlayer: SPATest.ServerCode.Player, keyboardGroup: LunnEngine.KeyboardGroup, isLocalPlayer: boolean) {
         this.position = serverPlayer.position;
         this.lastPositionVector = serverPlayer.lastPositionVector;
         this.team = serverPlayer.team;
@@ -32,7 +33,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
 		serverPlayer.startSize ? this.startSize = serverPlayer.startSize : this.startSize = <SPATest.ServerCode.Size> { height: 10, width: 10 };
         this.size = this.startSize;
         this.latestFrameUpdate = 0;
-        this.movement = 0.25;
+        this.movement = 0;
         this.isAlive = true;
 
 		if (keyboardGroup != null && isLocalPlayer) {
@@ -46,19 +47,23 @@ class ClientPlayer implements SPATest.ServerCode.Player {
     }
 
     update(ctx: CanvasRenderingContext2D, map: ClientMap, tickLenght: number) {
-        var newPosition = this.position;
+        this.previousPosition = new BoundingBox(this.position, {
+            x: this.position.x + this.size.width,
+            y: this.position.y + this.size.height
+        });
+        let newPosition = this.position;
 
-        if (this.isLocalPlayer) {
+        if (this.isLocalPlayer && this.isAlive) {
 			if (this.keyboardStates.isRightKeyDown) {
-				this.movement += 0.1;
+				this.movement += 0.3;
 			}
 
 			if (this.keyboardStates.isLeftKeyDown) {
-				this.movement -= 0.1;
+				this.movement -= 0.3;
 			}
 
-			var speed = (this.speed / tickLenght);
-			var newPos = <SPATest.ServerCode.Vector2D> {
+            const speed = this.speed / tickLenght;
+			const newPos = <SPATest.ServerCode.Vector2D> {
 				x: Math.round(Math.cos(this.movement) * speed + newPosition.x),
 				y: Math.round(Math.sin(this.movement) * speed + newPosition.y)
 			};
@@ -69,6 +74,10 @@ class ClientPlayer implements SPATest.ServerCode.Player {
 
     victoryMessage() {
         return Team.toString(this.team) + " won!";
+    }
+
+    get Name() {
+        return this.connectionId + ' (<span style="color: ' + this.color +  '">' + this.color + '</span>)';
     }
 
     private setColor(team: SPATest.ServerCode.Team) {

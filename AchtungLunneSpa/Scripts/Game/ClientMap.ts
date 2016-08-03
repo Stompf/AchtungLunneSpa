@@ -1,4 +1,4 @@
-﻿import BoundingBox = require("./BoundingBox");
+﻿import BoundingBox = require("../LunnEngine/BoundingBox");
 import ClientPlayer = require("./ClientPlayer");
 import utils = require('../common/Utils');
 import ko = require('knockout');
@@ -6,7 +6,8 @@ import collections = require('../collections');
 
 class ClientMap {
     mapSize: SPATest.ServerCode.Size;
-    mapParts: collections.Dictionary<string, SPATest.ServerCode.MapPart>;
+    mapParts: collections.Dictionary<string, boolean>;
+    renderMapParts: Array<SPATest.ServerCode.MapPart>;
     playerSize: number;
     startPositionPadding: number;
 
@@ -14,25 +15,61 @@ class ClientMap {
         this.mapSize = serverMap.mapSize;
         this.playerSize = serverMap.playerSize;
         this.startPositionPadding = serverMap.startPositionPadding;
-        this.mapParts = new collections.Dictionary<string, SPATest.ServerCode.MapPart>();
+        this.mapParts = new collections.Dictionary<string, boolean>();
 
-		this.resetMapParts();
+        this.resetMapParts();
     }
 
     resetMapParts() {
         this.mapParts.clear();
-	}
+        this.renderMapParts = new Array<SPATest.ServerCode.MapPart>();
+    }
+
+    update(players: Array<ClientPlayer>, textArea: KnockoutObservable<string>) {
+        players.forEach(player => {
+            if (player.isAlive) {
+                const positionBox = new BoundingBox(player.position, {
+                    x: player.position.x + player.size.width,
+                    y: player.position.y + player.size.height
+                });
+
+                if (!this.isValidPosition(player.position, player.size)) {
+                    player.isAlive = false;
+                    utils.appendNewLine(textArea, player.Name + ' died');
+                } else {
+                    for (let x = 0; x < player.size.width; x++) {
+                        for (let y = 0; y < player.size.height; y++) {
+                            const key = this.toMapPartKey(player.position.x + x, player.position.y + y);
+                            if (this.mapParts.containsKey(key) && !player.previousPosition.isInBounds({ x: player.position.x + x, y: player.position.y + y })) {
+                                player.isAlive = false;
+                                utils.appendNewLine(textArea, player.Name + ' died');
+                                return;
+                            } else {
+                                this.mapParts.setValue(this.toMapPartKey(player.position.x + x, player.position.y + y), true);
+                            }
+                        }
+                    }
+
+                    const part = <SPATest.ServerCode.MapPart>{
+                        color: player.color,
+                        owner: player.connectionId,
+                        x: player.position.x,
+                        y: player.position.y
+                    };
+
+                }
+            }
+        });
+    }
 
     render(ctx: CanvasRenderingContext2D, deltaTick: number) {
-		if (this.mapParts == null) {
-			return;
-		}
+        if (this.renderMapParts == null) {
+            return;
+        }
 
-        this.mapParts.values().forEach(mapPart => {
-            if (mapPart.color && mapPart.color != '#FFFFFF') {
-                ctx.fillStyle = mapPart.color;
-                ctx.fillRect(mapPart.x, mapPart.y, this.playerSize, this.playerSize);
-            }	
+        this.renderMapParts.forEach(mapPart => {
+            ctx.fillStyle = mapPart.color;
+            ctx.fillRect(mapPart.x, mapPart.y, this.playerSize, this.playerSize);
         });
     }
 
@@ -40,22 +77,25 @@ class ClientMap {
         return this.isInBounds(position, objectSize);
     }
 
-	getRandomStartPosition() {
-		var randX = utils.getRandomInt(this.startPositionPadding, this.mapSize.width - this.startPositionPadding);
-		var randY = utils.getRandomInt(this.startPositionPadding, this.mapSize.height - this.startPositionPadding);
-		return <SPATest.ServerCode.Vector2D> {
-			x: randX,
-			y: randY
-		};
-	}
+    getRandomStartPosition() {
+        const randX = utils.getRandomInt(this.startPositionPadding, this.mapSize.width - this.startPositionPadding);
+        const randY = utils.getRandomInt(this.startPositionPadding, this.mapSize.height - this.startPositionPadding);
+        return <SPATest.ServerCode.Vector2D>{
+            x: randX,
+            y: randY
+        };
+    }
 
-	toMapPartKey(X: number, Y: number) {
-		return X + '_' + Y;
+    toMapPartKey(x: number, y: number) {
+        return x + '_' + y;
     }
 
     addMapPart(player: SPATest.ServerCode.Player) {
-        var key = this.toMapPartKey(player.position.x, player.position.y);
-        this.mapParts.setValue(key, <SPATest.ServerCode.MapPart> {
+        if (this.renderMapParts == null) {
+            return;
+        }
+
+        this.renderMapParts.push(<SPATest.ServerCode.MapPart>{
             color: player.color,
             owner: player.connectionId,
             x: player.position.x,
@@ -66,7 +106,7 @@ class ClientMap {
     private isInBounds(position: SPATest.ServerCode.Vector2D, objectSize: SPATest.ServerCode.Size) {
         return position.x >= 0 &&
             position.x <= (this.mapSize.width - objectSize.width) &&
-            position.y >= 0 && position.y <= (this.mapSize.height - objectSize.height) ;
+            position.y >= 0 && position.y <= (this.mapSize.height - objectSize.height);
     }
 }
 export = ClientMap;
