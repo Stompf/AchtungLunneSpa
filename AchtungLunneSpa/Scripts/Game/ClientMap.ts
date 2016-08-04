@@ -3,6 +3,7 @@ import ClientPlayer = require("./ClientPlayer");
 import utils = require('../common/Utils');
 import ko = require('knockout');
 import collections = require('../collections');
+import moment = require('moment');
 
 class ClientMap {
     mapSize: SPATest.ServerCode.Size;
@@ -10,6 +11,11 @@ class ClientMap {
     renderMapParts: collections.Dictionary<string, SPATest.ServerCode.MapPart>;
     playerSize: number;
     startPositionPadding: number;
+
+    holePerCentChance = 3.5;
+    holeMinTimeIntervalInSec = 3;
+    holeMinLengthInSec = 0.3;
+    holeMaxLengthInSec = 0.5;
 
     constructor(serverMap: SPATest.ServerCode.Map) {
         this.mapSize = serverMap.mapSize;
@@ -27,35 +33,8 @@ class ClientMap {
     }
 
     update(players: Array<ClientPlayer>, textArea: KnockoutObservable<string>) {
-        players.forEach(player => {
-            if (player.isAlive) {
-                if (!this.isValidPosition(player.position, player.size)) {
-                    player.isAlive = false;
-                    utils.appendNewLine(textArea, player.Name + ' died');
-                } else {
-                    for (let x = 0; x < player.size.width; x++) {
-                        for (let y = 0; y < player.size.height; y++) {
-                            const key = this.toMapPartKey(player.position.x + x, player.position.y + y);
-                            if (this.mapParts.containsKey(key) && !player.previousPosition.isInBounds({ x: player.position.x + x, y: player.position.y + y })) {
-                                player.isAlive = false;
-                                utils.appendNewLine(textArea, player.Name + ' died');
-                                return;
-                            } else {
-                                this.mapParts.setValue(this.toMapPartKey(player.position.x + x, player.position.y + y), true);
-                            }
-                        }
-                    }
-
-                    const part = <SPATest.ServerCode.MapPart>{
-                        color: player.color,
-                        owner: player.connectionId,
-                        x: player.position.x,
-                        y: player.position.y
-                    };
-                    this.renderMapParts.setValue(this.toMapPartKey(player.position.x, player.position.y), part);
-                }
-            }
-        });
+        this.handlePlayerHoles(players);
+        this.handlePlayerMovementAndCollisions(players, textArea);
     }
 
     render(ctx: CanvasRenderingContext2D, deltaTick: number) {
@@ -103,6 +82,60 @@ class ClientMap {
         return position.x >= 0 &&
             position.x <= (this.mapSize.width - objectSize.width) &&
             position.y >= 0 && position.y <= (this.mapSize.height - objectSize.height);
+    }
+
+    private handlePlayerHoles(players: Array<ClientPlayer>) {
+        players.forEach(player => {
+            if (player.isAlive) {
+                const now = new Date();
+                if (player.haveCurrentHole && now.getTime() >= player.currentHoleEndTime.getTime()) {
+                    player.haveCurrentHole = false;
+                } else if (moment(player.currentHoleEndTime).add(this.holeMinTimeIntervalInSec, 'seconds').toDate().getTime() <= now.getTime()
+                    && Math.random() * 100 <= this.holePerCentChance) {
+
+                    player.haveCurrentHole = true;
+                    const time = Math.min(this.holeMaxLengthInSec, this.holeMinLengthInSec + Math.random());
+
+                    player.currentHoleEndTime = moment(now).add(time, 'seconds').toDate();
+                }
+            } else {
+                player.haveCurrentHole = false;
+            }
+        });
+    }
+
+    private handlePlayerMovementAndCollisions(players: Array<ClientPlayer>, textArea: KnockoutObservable<string>) {
+        players.forEach(player => {
+            if (player.isAlive) {
+                if (!this.isValidPosition(player.position, player.size)) {
+                    player.isAlive = false;
+                    utils.appendNewLine(textArea, player.Name + ' died');
+                } else {
+                    for (let x = 0; x < player.size.width; x++) {
+                        for (let y = 0; y < player.size.height; y++) {
+                            const key = this.toMapPartKey(player.position.x + x, player.position.y + y);
+                            if (this.mapParts.containsKey(key) && !player.previousPosition.isInBounds({ x: player.position.x + x, y: player.position.y + y })) {
+                                player.isAlive = false;
+                                utils.appendNewLine(textArea, player.Name + ' died');
+                                return;
+                            } else if (!player.haveCurrentHole) {
+                                this.mapParts.setValue(this.toMapPartKey(player.position.x + x, player.position.y + y), true);
+                            }
+                        }
+                    }
+
+                    if (!player.haveCurrentHole) {
+                        const part = <SPATest.ServerCode.MapPart>{
+                            color: player.color,
+                            owner: player.connectionId,
+                            x: player.position.x,
+                            y: player.position.y
+                        };
+                        this.renderMapParts.setValue(this.toMapPartKey(player.position.x, player.position.y), part);
+                    }
+                }
+            }
+        });
     }
 }
 export = ClientMap;

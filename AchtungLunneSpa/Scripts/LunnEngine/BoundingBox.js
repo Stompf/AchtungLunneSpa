@@ -15,3 +15,4 @@ define(["require", "exports"], function (require, exports) {
     }());
     return BoundingBox;
 });
+//# sourceMappingURL=BoundingBox.js.map

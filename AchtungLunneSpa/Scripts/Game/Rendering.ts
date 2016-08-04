@@ -5,8 +5,7 @@ module Rendering {
 
     export function render(ctx: CanvasRenderingContext2D, players: Array<ClientPlayer>, deltaTick: number, map: ClientMap) {
         ctx.save();
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 		
         renderMap(ctx, map, deltaTick);
         renderPlayers(ctx, players, deltaTick);

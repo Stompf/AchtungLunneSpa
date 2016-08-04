@@ -95,6 +95,10 @@ class Game {
         const startTimeInSec = 3;
         this.appendLine('Starting in ' + startTimeInSec + ' seconds...');
         setTimeout(() => {
+            this.currentPlayers().forEach(player => {
+                player.haveCurrentHole = false;
+                player.currentHoleEndTime = new Date();
+            });
             this.gameOn(true);
         }, startTimeInSec * 1000);
     }
@@ -168,8 +172,8 @@ class Game {
 		this.appendLine('Game start in ' + gameStartInSeconds + ' seconds');
 
 		setTimeout(() => {
-			this.appendLine('Game start!');
-			this.gameOn(true);
+            this.appendLine('Game start!');
+            this.gameOn(true);
 		}, gameStartInSeconds * 1000);
 	}
 

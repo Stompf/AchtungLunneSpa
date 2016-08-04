@@ -21,6 +21,8 @@ class ClientPlayer implements SPATest.ServerCode.Player {
     latestFrameUpdate: number;
     speed: number = 250;
     isAlive: boolean;
+    haveCurrentHole: boolean;
+    currentHoleEndTime: Date;
     lastPositionVector: SPATest.ServerCode.BoundingBox;
 
     constructor(serverPlayer: SPATest.ServerCode.Player, keyboardGroup: LunnEngine.KeyboardGroup, isLocalPlayer: boolean) {
@@ -35,7 +37,8 @@ class ClientPlayer implements SPATest.ServerCode.Player {
         this.latestFrameUpdate = 0;
         this.movement = 0;
         this.isAlive = true;
-
+        this.haveCurrentHole = false;
+        this.currentHoleEndTime = new Date();
 		if (keyboardGroup != null && isLocalPlayer) {
 			this.keyboardStates = new KeyboardStates(keyboardGroup);
 		}       

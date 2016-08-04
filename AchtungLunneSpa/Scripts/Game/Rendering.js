@@ -4,8 +4,7 @@ define(["require", "exports"], function (require, exports) {
     (function (Rendering) {
         function render(ctx, players, deltaTick, map) {
             ctx.save();
-            ctx.fillStyle = "#FFFFFF";
-            ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
             renderMap(ctx, map, deltaTick);
             renderPlayers(ctx, players, deltaTick);
             ctx.restore();
@@ -24,3 +23,4 @@ define(["require", "exports"], function (require, exports) {
     })(Rendering || (Rendering = {}));
     return Rendering;
 });
+//# sourceMappingURL=Rendering.js.map
