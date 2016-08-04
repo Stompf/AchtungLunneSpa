@@ -7,7 +7,7 @@ import collections = require('../collections');
 class ClientMap {
     mapSize: SPATest.ServerCode.Size;
     mapParts: collections.Dictionary<string, boolean>;
-    renderMapParts: Array<SPATest.ServerCode.MapPart>;
+    renderMapParts: collections.Dictionary<string, SPATest.ServerCode.MapPart>;
     playerSize: number;
     startPositionPadding: number;
 
@@ -16,23 +16,19 @@ class ClientMap {
         this.playerSize = serverMap.playerSize;
         this.startPositionPadding = serverMap.startPositionPadding;
         this.mapParts = new collections.Dictionary<string, boolean>();
+        this.renderMapParts = new collections.Dictionary<string, SPATest.ServerCode.MapPart>();
 
         this.resetMapParts();
     }
 
     resetMapParts() {
         this.mapParts.clear();
-        this.renderMapParts = new Array<SPATest.ServerCode.MapPart>();
+        this.renderMapParts.clear();
     }
 
     update(players: Array<ClientPlayer>, textArea: KnockoutObservable<string>) {
         players.forEach(player => {
             if (player.isAlive) {
-                const positionBox = new BoundingBox(player.position, {
-                    x: player.position.x + player.size.width,
-                    y: player.position.y + player.size.height
-                });
-
                 if (!this.isValidPosition(player.position, player.size)) {
                     player.isAlive = false;
                     utils.appendNewLine(textArea, player.Name + ' died');
@@ -56,7 +52,7 @@ class ClientMap {
                         x: player.position.x,
                         y: player.position.y
                     };
-
+                    this.renderMapParts.setValue(this.toMapPartKey(player.position.x, player.position.y), part);
                 }
             }
         });
@@ -67,7 +63,7 @@ class ClientMap {
             return;
         }
 
-        this.renderMapParts.forEach(mapPart => {
+        this.renderMapParts.values().forEach(mapPart => {
             ctx.fillStyle = mapPart.color;
             ctx.fillRect(mapPart.x, mapPart.y, this.playerSize, this.playerSize);
         });
@@ -95,7 +91,7 @@ class ClientMap {
             return;
         }
 
-        this.renderMapParts.push(<SPATest.ServerCode.MapPart>{
+        this.renderMapParts.setValue(this.toMapPartKey(player.position.x, player.position.y), <SPATest.ServerCode.MapPart>{
             color: player.color,
             owner: player.connectionId,
             x: player.position.x,

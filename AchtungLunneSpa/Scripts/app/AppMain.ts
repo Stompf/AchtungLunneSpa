@@ -28,7 +28,6 @@ class AppMain {
         this.selectedAppComponent(comp);
     }
 
-
     private handleSelectedAppComponentChanged(selectedComp: AppComponent) {
         if (selectedComp == null) {
             return;
