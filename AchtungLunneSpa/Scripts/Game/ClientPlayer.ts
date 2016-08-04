@@ -3,6 +3,7 @@ import ClientMap = require("./ClientMap");
 import Team = require("./Team");
 import collection = require('collections');
 import BoundingBox = require('../LunnEngine/BoundingBox');
+import ko = require('knockout');
 
 class ClientPlayer implements SPATest.ServerCode.Player {
 
@@ -18,6 +19,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
 	movement: number;
 
     isLocalPlayer: boolean;
+    score: KnockoutObservable<number>;
     latestFrameUpdate: number;
     speed: number = 250;
     isAlive: boolean;
@@ -29,6 +31,7 @@ class ClientPlayer implements SPATest.ServerCode.Player {
         this.position = serverPlayer.position;
         this.lastPositionVector = serverPlayer.lastPositionVector;
         this.team = serverPlayer.team;
+        this.score = ko.observable(0);
         this.color = this.setColor(this.team);       
         this.isLocalPlayer = isLocalPlayer;
 		this.connectionId = serverPlayer.connectionId;
