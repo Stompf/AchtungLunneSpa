@@ -285,3 +285,6 @@ AchtungLunneSpa/Scripts/viewModels/GameVIewModel.js
 AchtungLunneSpa/Scripts/viewModels/GameVIewModel.js.map
 AchtungLunneSpa/Scripts/game/ClientMap.js
 AchtungLunneSpa/Scripts/game/ClientMap.js.map
+AchtungLunneSpa/Scripts/common/ToastrOptions.js
+AchtungLunneSpa/Scripts/LunnEngine/BoundingBox.js
+AchtungLunneSpa/Scripts/Game/Rendering.js

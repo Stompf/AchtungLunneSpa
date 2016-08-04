@@ -23,4 +23,3 @@ define(["require", "exports"], function (require, exports) {
     })(Rendering || (Rendering = {}));
     return Rendering;
 });
-//# sourceMappingURL=Rendering.js.map
