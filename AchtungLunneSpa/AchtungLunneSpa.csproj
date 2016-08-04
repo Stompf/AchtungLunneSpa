@@ -257,7 +257,6 @@
       <DependentUpon>GameEntitesInterfaces.tt</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\LunnEngine\BoundingBox.ts" />
-    <TypeScriptCompile Include="Scripts\game\Game.ts" />
     <TypeScriptCompile Include="Scripts\LunnEngine\KeyboardStates.ts" />
     <TypeScriptCompile Include="Scripts\game\ClientMap.ts" />
     <TypeScriptCompile Include="Scripts\game\ClientPlayer.ts" />
