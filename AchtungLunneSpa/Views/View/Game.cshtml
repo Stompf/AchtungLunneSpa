@@ -1,6 +1,10 @@
 ﻿<div data-bind="foreach: $root.currentPlayers" style="width: 1000px; text-align: center; font-size: 20px;">
     <span data-bind="style: { color: $data.color }, text: $data.score"></span>
+    <!-- ko if: $index() !== $root.currentPlayers().length - 1 -->
+    <span>-</span>
+    <!-- /ko -->
 </div>
+<div style="text-align: center; width: 1000px;" data-bind="text: $root.winRuleText"></div>
 <canvas style="border: 1px solid black" width="1000" height="500" id="gameCanvas" class="target"></canvas>
 <br />
 <div style="max-width: 1000px; width: 1000px; height: 200px; border: 1px solid #ccc; overflow: auto;" data-bind="html: $root.textArea">

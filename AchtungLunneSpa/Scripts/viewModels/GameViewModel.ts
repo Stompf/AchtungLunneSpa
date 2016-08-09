@@ -27,6 +27,8 @@ class GameViewModel {
     lastTick: number = performance.now();
     tickLength: number = 50;
 
+    scoreToWin: KnockoutObservable<number> = ko.observable(5);
+
     myHub: MyHub;
     connectionID: string;
 
@@ -92,17 +94,33 @@ class GameViewModel {
         }
     }
 
+    winRuleText = ko.pureComputed({
+        read: () => {
+            return 'First to ' + this.scoreToWin() + ' wins';
+        },
+        deferEvaluation: true,
+        owner: this
+    });
+
     private startLocalGame() {
         this.appendLine('Starting local game...');
         this.initLocalMap();
         this.initLocalPlayers();
+        this.startNewRound();
+    }
+
+    private startNewRound() {
+        this.currentMap().resetMapParts();
+        this.currentPlayers().forEach(player => {
+            player.position = this.currentMap().getRandomStartPosition();
+            player.reset();
+        });
         this.main(performance.now());
 
         const startTimeInSec = 3;
         this.appendLine('Starting in ' + startTimeInSec + ' seconds...');
         setTimeout(() => {
             this.currentPlayers().forEach(player => {
-                player.haveCurrentHole = false;
                 player.currentHoleEndTime = new Date();
             });
             this.gameOn(true);
@@ -269,13 +287,29 @@ class GameViewModel {
                 return player.isAlive;
             });
 
+            const startNewRoundTime = 2;
             if (alivePlayers.length === 1) {
-                utils.appendNewLine(this.textArea, alivePlayers[0].Name + ' won!');
+                this.gameOn(false);
+                utils.appendNewLine(this.textArea, alivePlayers[0].Name + ' won the round!');
                 cancelAnimationFrame(this.mainAnimationReference);
                 alivePlayers[0].score(alivePlayers[0].score() + 1);
+
+                if (alivePlayers[0].score() >= this.scoreToWin()) {
+                    utils.appendNewLine(this.textArea, alivePlayers[0].Name + ' won the game!');
+                } else {
+                    utils.appendNewLine(this.textArea, 'Starting new round in ' + startNewRoundTime + ' seconds');
+                    setTimeout(() => {
+                        this.startNewRound();
+                    }, startNewRoundTime * 1000);
+                }
             } else if (alivePlayers.length === 0) {
+                this.gameOn(false);
                 utils.appendNewLine(this.textArea, 'Draw!');
                 cancelAnimationFrame(this.mainAnimationReference);
+                utils.appendNewLine(this.textArea, 'Starting new round in ' + startNewRoundTime + ' seconds');
+                setTimeout(() => {
+                    this.startNewRound();
+                }, startNewRoundTime * 1000);
             }
         }
     }
@@ -308,7 +342,6 @@ class GameViewModel {
         //Player 1
         var serverPlayer1 = <SPATest.ServerCode.Player>{
             team: SPATest.ServerCode.Team.BLUE,
-            position: this.currentMap().getRandomStartPosition(),
             connectionId: 'player1'
         };
         var player1 = new ClientPlayer(serverPlayer1, LunnEngine.KeyboardGroup.WSAD, true);
@@ -316,7 +349,6 @@ class GameViewModel {
         //Player 2
         var serverPlayer2 = <SPATest.ServerCode.Player>{
             team: SPATest.ServerCode.Team.RED,
-            position: this.currentMap().getRandomStartPosition(),
             connectionId: 'player2'
         };
         var player2 = new ClientPlayer(serverPlayer2, LunnEngine.KeyboardGroup.Arrows, true);

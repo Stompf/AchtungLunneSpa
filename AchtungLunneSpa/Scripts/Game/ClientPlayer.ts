@@ -82,6 +82,12 @@ class ClientPlayer implements SPATest.ServerCode.Player {
         return Team.toString(this.team) + " won!";
     }
 
+    reset() {
+        this.isAlive = true;
+        this.haveCurrentHole = false;
+        this.keyboardStates.resetAll();
+    }
+
     get Name() {
         return this.connectionId + ' (<span style="color: ' + this.color +  '">' + this.color + '</span>)';
     }
