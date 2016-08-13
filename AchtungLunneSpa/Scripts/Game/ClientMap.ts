@@ -11,6 +11,7 @@ class ClientMap {
     renderMapParts: collections.Dictionary<string, SPATest.ServerCode.MapPart>;
     playerSize: number;
     startPositionPadding: number;
+    startPositionPaddingOtherPlayers: number = 150;
 
     holePerCentChance = 3.5;
     holeMinTimeIntervalInSec = 3;
@@ -52,13 +53,22 @@ class ClientMap {
         return this.isInBounds(position, objectSize);
     }
 
-    getRandomStartPosition() {
+    getRandomStartPosition(playerPositions: Array<SPATest.ServerCode.Vector2D>) {
         const randX = utils.getRandomInt(this.startPositionPadding, this.mapSize.width - this.startPositionPadding);
         const randY = utils.getRandomInt(this.startPositionPadding, this.mapSize.height - this.startPositionPadding);
-        return <SPATest.ServerCode.Vector2D>{
-            x: randX,
-            y: randY
-        };
+
+        const tooCloseOtherPosition = playerPositions.some(position => {
+            return Math.abs(position.x - randX) <= this.startPositionPaddingOtherPlayers && Math.abs(position.y - randY) <= this.startPositionPaddingOtherPlayers;
+        });
+
+        if (tooCloseOtherPosition) {
+            return this.getRandomStartPosition(playerPositions);
+        } else {
+            return <SPATest.ServerCode.Vector2D>{
+                x: randX,
+                y: randY
+            };
+        }
     }
 
     toMapPartKey(x: number, y: number) {

@@ -111,9 +111,11 @@ class GameViewModel {
 
     private startNewRound() {
         this.currentMap().resetMapParts();
+        const playerPositions = new Array<SPATest.ServerCode.Vector2D>();
         this.currentPlayers().forEach(player => {
-            player.position = this.currentMap().getRandomStartPosition();
+            player.position = this.currentMap().getRandomStartPosition(playerPositions);
             player.reset();
+            playerPositions.push(player.position);
         });
         this.main(performance.now());
 
