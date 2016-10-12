@@ -64,3 +64,4 @@ define(["require", "exports"], function (require, exports) {
     }());
     return KeyboardStates;
 });
+//# sourceMappingURL=KeyboardStates.js.map
