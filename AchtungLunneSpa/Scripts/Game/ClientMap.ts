@@ -1,4 +1,4 @@
-﻿import BoundingBox = require("../LunnEngine/BoundingBox");
+﻿import BoundingBox = require("../lunnEngine/BoundingBox");
 import ClientPlayer = require("./ClientPlayer");
 import utils = require('../common/Utils');
 import ko = require('knockout');

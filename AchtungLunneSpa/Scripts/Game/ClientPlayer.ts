@@ -1,8 +1,8 @@
-﻿import KeyboardStates = require("../LunnEngine/KeyboardStates");
+﻿import KeyboardStates = require("../lunnEngine/KeyboardStates");
 import ClientMap = require("./ClientMap");
 import Team = require("./Team");
 import collection = require('collections');
-import BoundingBox = require('../LunnEngine/BoundingBox');
+import BoundingBox = require('../lunnEngine/BoundingBox');
 import ko = require('knockout');
 
 class ClientPlayer implements SPATest.ServerCode.Player {
