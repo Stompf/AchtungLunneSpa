@@ -10,9 +10,6 @@ class AppMain {
     constructor() {
         this.appComponents = ko.observableArray<AppComponent>();
         this.selectedAppComponent = ko.observable<AppComponent>();
-        this.selectedAppComponent.subscribe(selectedComp => {
-            this.handleSelectedAppComponentChanged(selectedComp);
-        });
     }
 
     activate() {
@@ -22,13 +19,29 @@ class AppMain {
         this.loadComponents();
     }
 
-    loadComponents() {
-        var comp = new AppComponent('Game', this.baseUrl + 'View/Game', 'viewModels/GameViewModel');
-        this.appComponents.push(comp);
-        this.selectedAppComponent(comp);
+    selectedComponent(id: string, activateContext?: any) {
+        const foundComp = ko.utils.arrayFirst(this.appComponents(), app => {
+            return app.id === id;
+        });
+        if (foundComp) {
+            this.selectedAppComponent(foundComp);
+            this.handleSelectedAppComponentChanged(foundComp, activateContext);
+        } else {
+            console.error('Could not find app with id: ' + id);
+        }
     }
 
-    private handleSelectedAppComponentChanged(selectedComp: AppComponent) {
+    private loadComponents() {
+        var mainMenuComp = new AppComponent('MainMenu', this.baseUrl + 'View/MainMenu', 'viewModels/MainMenuViewModel');
+        var gameComp = new AppComponent('Game', this.baseUrl + 'View/Game', 'viewModels/GameViewModel');
+        this.appComponents.push(mainMenuComp);
+        this.appComponents.push(gameComp);
+
+        this.selectedAppComponent(mainMenuComp);
+        this.handleSelectedAppComponentChanged(mainMenuComp);
+    }
+
+    private handleSelectedAppComponentChanged(selectedComp: AppComponent, activateContext?: any) {
         if (selectedComp == null) {
             return;
         }
@@ -55,7 +68,7 @@ class AppMain {
                 //Activate after html is done
                 setTimeout(() => {
                     if (viewModel.activate) {
-                        viewModel.activate();
+                        viewModel.activate(activateContext);
                     }
                 }, 0);
             })

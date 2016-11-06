@@ -257,5 +257,7 @@ AchtungLunneSpa/Scripts/game/*.js
 AchtungLunneSpa/Scripts/game/*.js.map
 AchtungLunneSpa/Scripts/lunnEngine/*.js
 AchtungLunneSpa/Scripts/lunnEngine/*.js.map
+AchtungLunneSpa/Scripts/LunnEngine/*.js
+AchtungLunneSpa/Scripts/LunnEngine/*.js.map
 AchtungLunneSpa/Scripts/Enums.js
 AchtungLunneSpa/Scripts/Enums.js.map

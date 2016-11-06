@@ -3,6 +3,7 @@
     paths: {
         'jquery': 'jquery-3.1.1.min',
         'knockout': 'knockout-3.4.0',
+        "knockout.validation": "knockout.validation",
         'toastr': 'toastr.min',
         'moment': 'moment.min',
         'signalr.core': 'jquery.signalR-2.2.1.min',
@@ -18,11 +19,14 @@
         },
         "signalr.hubs": {
             deps: ["signalr.core"],
+        },
+        "knockout.validation": {
+            "deps": ["knockout"]
         }
     }
 });
 
-require(["app/appMain", "jquery", "signalr.hubs"], function (appMain) {
+require(["app/appMain", "jquery", "signalr.hubs", "knockout.validation"], function (appMain) {
     var appMain = new appMain();
     appMain.activate();
 });

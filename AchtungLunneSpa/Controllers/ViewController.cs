@@ -13,6 +13,11 @@ namespace SPATest.Controllers
         {
             return View();
         }
+
+        public ActionResult MainMenu()
+        {
+            return View();
+        }
        
     }
 }

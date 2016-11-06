@@ -42,12 +42,14 @@ class GameViewModel {
         this.lastRender = this.lastTick;
     }
 
-    activate() {
+    activate(context: AchtungLunne.GameSettings) {
         utils.appendNewLine(this.textArea, 'Activate');
         this.ctx = (<HTMLCanvasElement>document.getElementById("gameCanvas")).getContext("2d");
         if (this.ctx != null) {
             this.initCanvas();
             const localgame = true;
+
+            this.scoreToWin(context.scoreToWin);
 
             if (localgame) {
                 this.startLocalGame();

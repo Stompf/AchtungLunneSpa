@@ -1,0 +1,28 @@
+﻿<div style="text-align: center;">
+    <div data-bind="visible: $root.isMainVisible" style="display: inline-block;">
+        <h1>AchtungLunne</h1>
+        <div class="form-group">
+            <button class="btn btn-primary" style="width: 200px; font-size: 22px;" data-bind="click: $root.matchmakingClicked, enable: false">Matchmaking</button>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" style="width: 200px; font-size: 22px;" data-bind="click: $root.customGameClicked">Custom Game</button>
+        </div>
+    </div>
+    <div data-bind="visible: $root.isCustomSettingVisible" style="display: inline-block;">
+        <h1>Custom Game</h1>
+
+        <div class="form-group" style="margin-top: 20px; margin-bottom: 20px;">
+            <label for="ScoreToWin">Score to win:</label>
+            <input type="number" 
+                   data-bind="value: $root.scoreToWin" 
+                   class="form-control" 
+                   id="ScoreToWin" 
+                   style="width: 100px; display: inline-block;">
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-default" style="width: 100px;" data-bind="click: $root.backClicked">Back</button>
+            <button class="btn btn-success" style="width: 100px;" data-bind="click: $root.startCustomGameClicked">Start</button>
+        </div>
+    </div>
+</div>

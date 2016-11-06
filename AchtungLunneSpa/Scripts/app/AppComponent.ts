@@ -9,6 +9,5 @@
         this.htmlPath = htmlPath;
         this.jsPath = jsPath;
     }
-
 }
 export = AppComponent; 

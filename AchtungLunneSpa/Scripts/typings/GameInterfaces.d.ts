@@ -19,3 +19,9 @@ interface MyHub {
 interface SignalR {
 	myHub: MyHub;
 }
+
+declare namespace AchtungLunne {
+    interface GameSettings {
+        scoreToWin: number;
+    }
+}

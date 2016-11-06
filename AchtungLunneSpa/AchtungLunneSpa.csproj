@@ -251,6 +251,7 @@
     <Content Include="Scripts\Manager.ttinclude" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
+    <Content Include="Views\View\MainMenu.cshtml" />
     <TypeScriptCompile Include="Scripts\collections.ts" />
     <TypeScriptCompile Include="Scripts\common\Utils.ts" />
     <TypeScriptCompile Include="Scripts\Enums.ts">
@@ -294,6 +295,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Compile Include="ServerCode\BoundingBox.cs" />
+    <TypeScriptCompile Include="Scripts\viewModels\MainMenuViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
