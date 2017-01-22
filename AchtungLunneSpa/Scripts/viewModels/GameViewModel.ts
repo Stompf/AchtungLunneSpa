@@ -32,6 +32,8 @@ class GameViewModel {
     myHub: MyHub;
     connectionID: string;
 
+    private currentContext: AchtungLunne.GameSettings;
+
     constructor(app: AppMain) {
         this.appMain = app;
         this.textArea = ko.observable<string>(moment().format('HH:mm:ss') + ' - Welcome!');
@@ -50,6 +52,7 @@ class GameViewModel {
             const localgame = true;
 
             this.scoreToWin(context.scoreToWin);
+            this.currentContext = context;
 
             if (localgame) {
                 this.startLocalGame();
@@ -349,6 +352,7 @@ class GameViewModel {
             connectionId: 'player1'
         };
         var player1 = new ClientPlayer(serverPlayer1, LunnEngine.KeyboardGroup.WSAD, true);
+        player1.speed = this.currentContext.gameSpeed;
 
         //Player 2
         var serverPlayer2 = <SPATest.ServerCode.Player>{
@@ -356,6 +360,7 @@ class GameViewModel {
             connectionId: 'player2'
         };
         var player2 = new ClientPlayer(serverPlayer2, LunnEngine.KeyboardGroup.Arrows, true);
+        player2.speed = this.currentContext.gameSpeed;
 
         this.currentPlayers([player1, player2]);
         this.currentLocalPlayers(this.currentPlayers());

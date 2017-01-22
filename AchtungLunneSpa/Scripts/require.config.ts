@@ -2,7 +2,7 @@
     urlArgs: "bust=" + (new Date()).getTime(),
     paths: {
         'jquery': 'jquery-3.1.1.min',
-        'knockout': 'knockout-3.4.0',
+        'knockout': 'knockout-3.4.1',
         "knockout.validation": "knockout.validation",
         'toastr': 'toastr.min',
         'moment': 'moment.min',

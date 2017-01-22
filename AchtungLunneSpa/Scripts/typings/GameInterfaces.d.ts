@@ -23,5 +23,6 @@ interface SignalR {
 declare namespace AchtungLunne {
     interface GameSettings {
         scoreToWin: number;
+        gameSpeed: number;
     }
 }

@@ -4,6 +4,7 @@ import ko = require('knockout');
 class MainMenuViewModel {
 
     scoreToWin: KnockoutObservable<number>;
+    gameSpeed: KnockoutObservable<number>;
 
     private state: KnockoutObservable<MainMenuViewModel.MainMenuState>;
     private appMain: AppMain;
@@ -12,6 +13,7 @@ class MainMenuViewModel {
     constructor(app: AppMain) {
         this.appMain = app;
         this.scoreToWin = ko.observable(5).extend({ min: 1, max: 9999 });
+        this.gameSpeed = ko.observable(250).extend({ min: 1, max: 9999 });
         this.state = ko.observable(MainMenuViewModel.MainMenuState.Main);
 
         this.errors = ko.validation.group(this);
@@ -64,7 +66,8 @@ class MainMenuViewModel {
         }
 
         const settings = <AchtungLunne.GameSettings>{
-            scoreToWin: this.scoreToWin()
+            scoreToWin: this.scoreToWin(),
+            gameSpeed: this.gameSpeed()
         };
         this.appMain.selectedComponent('Game', settings);
     };
